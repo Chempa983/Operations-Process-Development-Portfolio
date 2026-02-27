@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Project 01 — Digital Production Monitoring & OEE Framework</title>
+  <meta name="description" content="Case study: digital production monitoring, KPI framework, downtime analysis, and preventive maintenance logic (anonymized)." />
+  <link rel="stylesheet" href="assets/styles.css" />
+</head>
+
+<body>
+  <header class="nav">
+    <div class="container nav-inner">
+      <div class="brand">
+        <a href="index.html">← Portfolio</a>
+        <span class="badge">Project 01</span>
+      </div>
+      <nav class="nav-links">
+        <a href="#overview">Overview</a>
+        <a href="#architecture">Architecture</a>
+        <a href="#kpis">KPIs</a>
+        <a href="#impact">Impact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero" id="overview">
+      <div class="card card-pad">
+        <h1 class="h-title">Digital Production Monitoring & OEE Framework</h1>
+        <p class="h-sub">
+          An anonymized industrial case study: I designed a structured data capture model and a Power BI reporting system
+          enabling shift transparency, downtime classification, trend analysis, team performance follow-up, and preventive action planning.
+        </p>
+
+        <div class="kpis">
+          <span class="pill">🏭 High-volume production context</span>
+          <span class="pill">📊 Power BI + Excel (SharePoint/OneDrive-ready)</span>
+          <span class="pill">🧠 RCA workflows (5 Why / Ishikawa)</span>
+          <span class="pill">⏱️ OEE / MTBF / MTTR focus</span>
+        </div>
+
+        <hr class="hr" />
+
+        <div class="grid">
+          <div class="col-6">
+            <h3 style="margin:0 0 8px;">Challenge</h3>
+            <ul class="list">
+              <li>Lack of standardized shift data collection</li>
+              <li>Inconsistent downtime reporting and weak root-cause visibility</li>
+              <li>No reliable historical analysis of recurring failures</li>
+              <li>Reactive maintenance dominating instead of preventive planning</li>
+            </ul>
+          </div>
+
+          <div class="col-6">
+            <h3 style="margin:0 0 8px;">Goal</h3>
+            <ul class="list">
+              <li>Build a simple operator-friendly input structure</li>
+              <li>Create real-time dashboards for production + maintenance</li>
+              <li>Identify top downtime drivers using Pareto logic</li>
+              <li>Enable preventive actions based on actual operational data</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="architecture">
+      <div class="section-title">
+        <h2>Solution Architecture</h2>
+        <p>3-layer model: Input → Storage → Visualization</p>
+      </div>
+
+      <div class="grid">
+        <div class="card card-pad col-4">
+          <h3>1) Data input</h3>
+          <p>Standardized shift-level Excel templates for operators: production, downtime, reason codes, comments.</p>
+          <div class="meta">
+            <span class="tag">Validation lists</span>
+            <span class="tag">Reason codes</span>
+          </div>
+        </div>
+
+        <div class="card card-pad col-4">
+          <h3>2) Storage</h3>
+          <p>Central file storage (SharePoint / OneDrive / network share) to keep one single source of truth.</p>
+          <div class="meta">
+            <span class="tag">Version control</span>
+            <span class="tag">Access roles</span>
+          </div>
+        </div>
+
+        <div class="card card-pad col-4">
+          <h3>3) Analytics</h3>
+          <p>Power BI model with scheduled refresh and interactive dashboards for different roles.</p>
+          <div class="meta">
+            <span class="tag">Power Query</span>
+            <span class="tag">DAX measures</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="kpis">
+      <div class="section-title">
+        <h2>KPI Framework</h2>
+        <p>Operational visibility and maintenance readiness</p>
+      </div>
+
+      <div class="grid">
+        <div class="card card-pad col-6">
+          <h3>Core KPIs</h3>
+          <ul class="list">
+            <li>OEE (availability × performance × quality), target ≥ 85%</li>
+            <li>MTBF (mean time between failures), target ≥ 200 hours</li>
+            <li>MTTR (mean time to repair), target ≤ 2 hours</li>
+            <li>Downtime share, target ≤ 5%</li>
+          </ul>
+          <p class="small" style="margin-top:10px;">
+            KPI definitions and target logic are implemented as calculated measures for consistent reporting. :contentReference[oaicite:1]{index=1}
+          </p>
+        </div>
+
+        <div class="card card-pad col-6">
+          <h3>Failure analysis & RCA</h3>
+          <ul class="list">
+            <li>3-level downtime categorization (type → category → specific fault)</li>
+            <li>Pareto (80/20) to identify top drivers of downtime</li>
+            <li>RCA workflow: 5 Why + Ishikawa + action plan + follow-up reminders</li>
+          </ul>
+          <p class="small" style="margin-top:10px;">
+            The objective is to stop repeat failures through structured learning loops. :contentReference[oaicite:2]{index=2}
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="impact">
+      <div class="section-title">
+        <h2>Expected Operational Impact</h2>
+        <p>Measurable improvement targets</p>
+      </div>
+
+      <div class="grid">
+        <div class="card card-pad col-8">
+          <h3>Targets (12 months after full rollout)</h3>
+          <ul class="list">
+            <li>Reduce unplanned downtime by ~25–35%</li>
+            <li>Increase OEE to at least 85% for packaging operations</li>
+            <li>Reduce MTTR by ~20% through better fault descriptions and faster diagnosis</li>
+            <li>Increase data quality: ≥ 80% correct fault coding</li>
+          </ul>
+          <p class="small" style="margin-top:10px;">
+            These targets are defined as part of the project’s expected results & ROI. :contentReference[oaicite:3]{index=3}
+          </p>
+        </div>
+
+        <div class="card card-pad col-4">
+          <div class="badge">ROI note</div>
+          <p class="small" style="margin-top:10px;">
+            Investment payback is estimated within ~6–10 months after go-live, primarily through reduced downtime costs
+            and improved production efficiency. :contentReference[oaicite:4]{index=4}
+          </p>
+          <hr class="hr" />
+          <a class="btn primary" href="index.html">🏠 Back to portfolio</a>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div>© <span id="year"></span> Petar Dojčinović — Project 01 (Anonymized)</div>
+    </footer>
+  </main>
+
+  <script src="assets/app.js"></script>
+</body>
+</html>
