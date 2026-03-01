@@ -1,4 +1,4 @@
-<!-- pesisttema.html -->
+<!-- pesisttema.html (UPGRADED • ENGLISH) -->
 <!doctype html>
 <html lang="en">
 <head>
@@ -26,52 +26,56 @@
 </header>
 
 <main class="container">
+
+  <!-- HERO / SUMMARY -->
   <section class="section">
     <div class="section-title">
-      <h2>PESISTTEMA — Public Emergency Safety Information System Through Technology</h2>
-      <p>Strategic concept • System design • Public safety operations</p>
+      <h2>PESISTTEMA</h2>
+      <p>Public Emergency Safety Information System Through Technology</p>
     </div>
 
     <div class="grid">
       <div class="card card-pad col-8">
-        <h3>Concept Summary</h3>
+        <h3>What I built (concept)</h3>
         <p>
           I designed PESISTTEMA as a unified municipal safety platform that connects citizens,
-          municipalities, and emergency stakeholders through real-time reporting, verified identity,
-          and structured operational workflows.
+          municipalities, and emergency stakeholders through structured reporting, verified workflows,
+          and an operational dashboard for prioritization and follow-up.
         </p>
 
-        <h3 style="margin-top:16px;">Core Modules</h3>
-        <ul class="list">
-          <li>Citizen incident reporting (geo + media evidence)</li>
-          <li>Location-based alerts (severity-based)</li>
-          <li>SOS function with automatic location sharing</li>
-          <li>Operations dashboard for prioritization & follow-up</li>
-          <li>Analytics layer for trend detection and resource planning</li>
-        </ul>
+        <div class="kpis" style="margin-top:12px;">
+          <span class="pill">🧭 Public-sector operations</span>
+          <span class="pill">🧠 System thinking</span>
+          <span class="pill">🧯 Emergency logic</span>
+          <span class="pill">📊 Analytics & transparency</span>
+        </div>
 
-        <h3 style="margin-top:16px;">Operational Value</h3>
+        <hr class="hr" />
+
+        <h3>Problem context</h3>
         <ul class="list">
-          <li>Faster signal-to-response through standardized intake</li>
-          <li>Higher reporting trust through verified identity options</li>
-          <li>Transparent communication workflows (who does what, when)</li>
-          <li>Scalable architecture for multi-city expansion</li>
+          <li>Citizens often don’t know where or how to report issues (non-emergency, semi-urgent, urgent).</li>
+          <li>Reports are fragmented across channels, leading to slower response and weak traceability.</li>
+          <li>Municipal follow-up is hard to measure without a standardized intake and categorization model.</li>
+          <li>Trust decreases when citizens receive no feedback or timeline after reporting.</li>
         </ul>
       </div>
 
       <div class="card card-pad col-4">
-        <div class="badge">Positioning</div>
-        <p class="small" style="margin-top:10px;">
-          This is a concept-development project demonstrating system thinking,
-          risk logic, and operational execution design for public-sector scale.
-        </p>
+        <div class="badge">Project meta</div>
+
+        <div class="small" style="margin-top:10px;">
+          <div><strong>Type:</strong> Strategic concept</div>
+          <div><strong>Focus:</strong> Safety + operations</div>
+          <div><strong>My role:</strong> Concept owner / system design</div>
+          <div><strong>Outputs:</strong> Modules, workflows, dashboard logic</div>
+        </div>
 
         <hr class="hr" />
 
         <div class="small">
-          <div><strong>Category:</strong> Strategic Concept</div>
-          <div><strong>Focus:</strong> Safety + Operations</div>
-          <div><strong>Deliverables:</strong> Concept, modules, workflows</div>
+          <div><strong>Audience:</strong> Municipalities & public partners</div>
+          <div><strong>Goal:</strong> Faster intake → clearer ownership → measurable follow-up</div>
         </div>
 
         <div style="margin-top:14px;">
@@ -80,6 +84,175 @@
       </div>
     </div>
   </section>
+
+  <!-- CORE MODULES -->
+  <section class="section">
+    <div class="section-title">
+      <h2>Core modules</h2>
+      <p>How the platform is structured</p>
+    </div>
+
+    <div class="grid">
+      <div class="card card-pad col-6">
+        <h3>1) Citizen app</h3>
+        <ul class="list">
+          <li>Incident reporting with geo-location + photo/video evidence</li>
+          <li>Category selection (traffic, lighting, crime risk, vandalism, hazards, noise, etc.)</li>
+          <li>Severity level guidance (non-urgent vs urgent vs emergency)</li>
+          <li>Status tracking (received → assigned → in progress → resolved)</li>
+          <li>Local alerts and community updates (location-based)</li>
+        </ul>
+      </div>
+
+      <div class="card card-pad col-6">
+        <h3>2) Municipal operations dashboard</h3>
+        <ul class="list">
+          <li>Standardized intake queue with prioritization rules</li>
+          <li>Assignment workflows (ownership + SLA targets)</li>
+          <li>Evidence review & validation flags</li>
+          <li>Internal notes + citizen-facing updates</li>
+          <li>Case closure logic + reporting for audits</li>
+        </ul>
+      </div>
+
+      <div class="card card-pad col-6">
+        <h3>3) Emergency logic layer</h3>
+        <ul class="list">
+          <li>SOS button with automatic location sharing</li>
+          <li>Escalation triggers based on severity and keywords</li>
+          <li>Basic triage guidance (what to do now)</li>
+          <li>Integration-ready structure for emergency stakeholders</li>
+        </ul>
+      </div>
+
+      <div class="card card-pad col-6">
+        <h3>4) Analytics & transparency</h3>
+        <ul class="list">
+          <li>Heatmaps and trends (time, location, category)</li>
+          <li>Response time analysis (SLA compliance)</li>
+          <li>Recurring risk patterns and “hot spot” detection</li>
+          <li>Public transparency summaries (aggregated / anonymized)</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- WORKFLOWS -->
+  <section class="section">
+    <div class="section-title">
+      <h2>Operational workflow</h2>
+      <p>From report to resolution (traceable)</p>
+    </div>
+
+    <div class="grid">
+      <div class="card card-pad col-12">
+        <ol class="list">
+          <li><strong>Citizen submits report</strong> (category + severity + evidence + location)</li>
+          <li><strong>System validates</strong> (duplicate detection, incomplete fields, basic rules)</li>
+          <li><strong>Queue prioritization</strong> (severity, risk type, proximity to sensitive zones)</li>
+          <li><strong>Assignment</strong> (department / partner owner + SLA timer)</li>
+          <li><strong>Execution & follow-up</strong> (updates pushed to citizen, internal notes logged)</li>
+          <li><strong>Closure</strong> (resolution code, root-cause tag, prevention suggestion)</li>
+          <li><strong>Analytics</strong> (trend and KPI reporting for governance)</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- KPI & VALUE -->
+  <section class="section">
+    <div class="section-title">
+      <h2>Value & KPIs</h2>
+      <p>How impact can be measured</p>
+    </div>
+
+    <div class="grid">
+      <div class="card card-pad col-6">
+        <h3>Operational KPIs</h3>
+        <ul class="list">
+          <li>Average time-to-triage</li>
+          <li>Average time-to-assign ownership</li>
+          <li>SLA compliance by category</li>
+          <li>Re-open rate (quality indicator)</li>
+          <li>Duplicate rate (signal-to-noise control)</li>
+        </ul>
+      </div>
+
+      <div class="card card-pad col-6">
+        <h3>Community KPIs</h3>
+        <ul class="list">
+          <li>Citizen satisfaction after closure (simple rating)</li>
+          <li>Transparency rate (cases with regular status updates)</li>
+          <li>Reduction in recurring incidents by hotspot</li>
+          <li>Increase in “early reporting” (preventive effect)</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ARCHITECTURE (HIGH LEVEL) -->
+  <section class="section">
+    <div class="section-title">
+      <h2>Architecture (high-level)</h2>
+      <p>How I would structure the system for scale</p>
+    </div>
+
+    <div class="grid">
+      <div class="card card-pad col-12">
+        <ul class="list">
+          <li><strong>Front-end:</strong> Citizen app + web portal</li>
+          <li><strong>Back-end services:</strong> Authentication, case management, notification service</li>
+          <li><strong>Data model:</strong> Case entity + evidence + geo + status history + SLA clock</li>
+          <li><strong>Integrations:</strong> Municipality ticketing, emergency partner endpoints (future)</li>
+          <li><strong>Security:</strong> Role-based access, evidence integrity, anonymized public outputs</li>
+        </ul>
+        <p class="small" style="margin-top:10px;">
+          I keep this page intentionally non-technical where confidentiality and implementation details apply.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- NEXT STEPS -->
+  <section class="section">
+    <div class="section-title">
+      <h2>Next steps</h2>
+      <p>What I would execute first</p>
+    </div>
+
+    <div class="grid">
+      <div class="card card-pad col-6">
+        <h3>Phase 1 — Pilot (single municipality)</h3>
+        <ul class="list">
+          <li>Define categories, severities, and SLA targets</li>
+          <li>Build MVP reporting + dashboard + status updates</li>
+          <li>Run controlled pilot with selected user group</li>
+          <li>Measure KPI baseline and iterate</li>
+        </ul>
+      </div>
+
+      <div class="card card-pad col-6">
+        <h3>Phase 2 — Scale</h3>
+        <ul class="list">
+          <li>Integrations with existing municipal workflows</li>
+          <li>Analytics and transparency layer expansion</li>
+          <li>Multi-city configuration (templates + governance)</li>
+          <li>Partner ecosystem (security, emergency, infrastructure)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card card-pad" style="margin-top:14px;">
+      <blockquote>
+        I designed PESISTTEMA to make safety operations measurable: standard intake, clear ownership,
+        traceable follow-up, and data-driven prevention.
+      </blockquote>
+      <div style="margin-top:12px;">
+        <a class="btn" href="index.html#contact">Contact me →</a>
+      </div>
+    </div>
+  </section>
+
 </main>
 
 <script src="assets/app.js"></script>
