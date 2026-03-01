@@ -1,70 +1,525 @@
-<!-- motel-restaurant-hund.html (SIMPLE PAGE) -->
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Motel & Restaurant for Dogs</title>
-  <meta name="description" content="Large-scale dog hospitality concept: accommodation, services, and facility planning." />
-  <link rel="stylesheet" href="assets/styles.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Motel & Restaurant for Dogs — Concept</title>
+  <meta name="description" content="Large-scale dog hospitality concept: accommodation, training services, and structured facility planning."/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #0a0c10;
+      --surface: #111318;
+      --surface2: #181c24;
+      --border: rgba(255,255,255,0.07);
+      --blue: #2f7fff;
+      --blue-light: #5a9fff;
+      --orange: #ff6b2b;
+      --orange-light: #ff9a6c;
+      --text: #e8eaf0;
+      --muted: #6b7280;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 0;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.2rem 4rem;
+      background: rgba(10,12,16,0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-back {
+      display: flex; align-items: center; gap: 0.6rem;
+      text-decoration: none; color: var(--muted);
+      font-size: 0.85rem; letter-spacing: 0.05em; transition: color 0.2s;
+    }
+    .nav-back:hover { color: var(--text); }
+    .nav-badge {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      padding: 0.3rem 0.8rem;
+      background: rgba(47,127,255,0.1);
+      border: 1px solid rgba(47,127,255,0.25);
+      color: var(--blue-light); border-radius: 2rem;
+    }
+    .nav-links-inner { display: flex; gap: 2rem; list-style: none; }
+    .nav-links-inner a {
+      color: var(--muted); text-decoration: none;
+      font-size: 0.82rem; letter-spacing: 0.08em;
+      text-transform: uppercase; transition: color 0.2s;
+    }
+    .nav-links-inner a:hover { color: var(--text); }
+
+    /* LAYOUT */
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 4rem; }
+
+    /* HERO */
+    .hero {
+      padding: 9rem 0 5rem;
+      position: relative; overflow: hidden;
+    }
+    .hero::after {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(47,127,255,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(47,127,255,0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+    }
+    .hero-inner { position: relative; z-index: 1; }
+
+    .project-eyebrow {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: rgba(47,127,255,0.08);
+      border: 1px solid rgba(47,127,255,0.2);
+      border-radius: 2rem; padding: 0.4rem 1rem;
+      font-size: 0.75rem; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--blue-light);
+      margin-bottom: 1.5rem; animation: fadeUp 0.6s ease both;
+    }
+
+    .hero h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2rem, 4vw, 3.4rem);
+      font-weight: 800; line-height: 1.05;
+      letter-spacing: -0.02em; margin-bottom: 1.2rem;
+      animation: fadeUp 0.6s 0.1s ease both;
+    }
+    .hero h1 .accent { color: var(--orange); }
+
+    .hero-desc {
+      font-size: 1.05rem; color: var(--muted);
+      max-width: 680px; margin-bottom: 2rem;
+      animation: fadeUp 0.6s 0.2s ease both;
+    }
+
+    .pills { display: flex; flex-wrap: wrap; gap: 0.6rem; animation: fadeUp 0.6s 0.3s ease both; }
+    .pill {
+      padding: 0.35rem 0.9rem; border: 1px solid var(--border);
+      border-radius: 0.3rem; font-size: 0.78rem;
+      letter-spacing: 0.05em; color: var(--muted); background: var(--surface);
+    }
+
+    /* DIVIDER */
+    .divider { height: 1px; background: linear-gradient(90deg, transparent, var(--border), transparent); }
+
+    /* SECTIONS */
+    .section { padding: 5rem 0; }
+    .section-label {
+      display: flex; align-items: center; gap: 1rem;
+      font-size: 0.72rem; letter-spacing: 0.15em;
+      text-transform: uppercase; color: var(--blue); margin-bottom: 0.7rem;
+    }
+    .section-label::after {
+      content: ''; flex: 1; max-width: 60px;
+      height: 1px; background: var(--blue); opacity: 0.5;
+    }
+    .section-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(1.5rem, 3vw, 2.2rem);
+      font-weight: 800; line-height: 1.1; margin-bottom: 0.5rem;
+    }
+    .section-sub { color: var(--muted); font-size: 0.95rem; margin-bottom: 2.5rem; }
+
+    /* CARDS */
+    .card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 0.8rem; padding: 2rem;
+      position: relative; overflow: hidden; transition: border-color 0.25s;
+    }
+    .card:hover { border-color: rgba(47,127,255,0.2); }
+    .card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--blue), transparent);
+    }
+    .card.orange::before { background: linear-gradient(90deg, var(--orange), transparent); }
+    .card.orange:hover { border-color: rgba(255,107,43,0.2); }
+
+    .card h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1rem; font-weight: 700; margin-bottom: 1rem; color: var(--text);
+    }
+    .arch-number {
+      font-family: 'Syne', sans-serif;
+      font-size: 2.5rem; font-weight: 800;
+      color: var(--surface2); line-height: 1; margin-bottom: 0.8rem;
+      transition: color 0.3s;
+    }
+    .card:hover .arch-number { color: rgba(47,127,255,0.18); }
+    .card.orange:hover .arch-number { color: rgba(255,107,43,0.18); }
+
+    .list { list-style: none; display: flex; flex-direction: column; gap: 0.55rem; }
+    .list li {
+      font-size: 0.88rem; color: var(--muted);
+      display: flex; align-items: flex-start; gap: 0.7rem; line-height: 1.5;
+    }
+    .list li::before {
+      content: '▸'; color: var(--blue);
+      font-size: 0.7rem; flex-shrink: 0; margin-top: 0.25rem;
+    }
+    .card.orange .list li::before { color: var(--orange); }
+
+    .card-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.2rem; }
+    .ctag {
+      font-size: 0.72rem; padding: 0.2rem 0.6rem;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 0.25rem; color: var(--muted); letter-spacing: 0.05em;
+    }
+
+    /* GRIDS */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    .three-col { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+
+    /* ZONE PANEL */
+    .zones-row {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 1px; background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 0.8rem; overflow: hidden; margin-bottom: 2rem;
+    }
+    .zone-item {
+      background: var(--surface); padding: 1.5rem; text-align: center;
+      transition: background 0.2s;
+    }
+    .zone-item:hover { background: var(--surface2); }
+    .zone-icon { font-size: 1.8rem; margin-bottom: 0.5rem; }
+    .zone-name {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.82rem; font-weight: 700; color: var(--text);
+      margin-bottom: 0.3rem;
+    }
+    .zone-desc { font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.07em; }
+
+    /* REVENUE CARD */
+    .revenue-card {
+      background: linear-gradient(135deg, rgba(47,127,255,0.1), rgba(47,127,255,0.04));
+      border: 1px solid rgba(47,127,255,0.2);
+      border-radius: 0.8rem; padding: 2rem;
+    }
+    .revenue-card h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1rem; font-weight: 700; margin-bottom: 1rem; color: var(--text);
+    }
+    .revenue-streams { display: flex; flex-direction: column; gap: 0.7rem; }
+    .revenue-item {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.7rem 1rem;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: 0.4rem;
+    }
+    .revenue-label { font-size: 0.85rem; color: var(--muted); }
+    .revenue-tag {
+      font-size: 0.7rem; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--blue-light);
+      background: rgba(47,127,255,0.1);
+      border: 1px solid rgba(47,127,255,0.2);
+      padding: 0.2rem 0.6rem; border-radius: 2rem;
+    }
+
+    /* QUOTE */
+    .quote-block {
+      margin-top: 2rem; padding: 1.5rem 2rem;
+      border-left: 3px solid var(--blue);
+      background: rgba(47,127,255,0.04);
+      border-radius: 0 0.5rem 0.5rem 0;
+      font-style: italic; font-size: 1rem; color: var(--muted);
+    }
+
+    /* BUTTONS */
+    .btn-back {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      padding: 0.85rem 2rem; background: transparent; color: var(--text);
+      border: 1px solid var(--border); border-radius: 0.4rem;
+      font-family: 'Syne', sans-serif; font-weight: 600;
+      font-size: 0.85rem; letter-spacing: 0.06em;
+      text-transform: uppercase; text-decoration: none;
+      transition: border-color 0.2s, color 0.2s; margin-top: 2rem;
+    }
+    .btn-back:hover { border-color: var(--orange); color: var(--orange-light); }
+
+    /* FOOTER */
+    footer {
+      padding: 1.5rem 0; border-top: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 0.78rem; color: var(--muted); margin-top: 2rem;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .reveal {
+      opacity: 0; transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    @media (max-width: 900px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links-inner { display: none; }
+      .container { padding: 0 1.5rem; }
+      .hero { padding: 7rem 0 3rem; }
+      .two-col, .three-col { grid-template-columns: 1fr; }
+      .zones-row { grid-template-columns: 1fr 1fr; }
+      footer { flex-direction: column; gap: 0.5rem; }
+    }
+  </style>
 </head>
-
 <body>
-<header class="nav">
-  <div class="container nav-inner">
-    <div class="brand">
-      <a href="index.html" style="text-decoration:none;color:inherit;">
-        <span>Petar Dojčinović</span>
-        <span class="badge">Operations Portfolio</span>
-      </a>
-    </div>
-    <nav class="nav-links">
-      <a href="index.html#concepts">Back</a>
-      <a href="index.html#contact">Contact</a>
-    </nav>
-  </div>
-</header>
 
-<main class="container">
-  <section class="section">
-    <div class="section-title">
-      <h2>Motel & Restaurant for Dogs</h2>
-      <p>Facility planning • Multi-service operations • Scalable hospitality concept</p>
-    </div>
+  <nav>
+    <a href="index.html" class="nav-back">← Portfolio</a>
+    <span class="nav-badge">Concept 03 · Facility Planning</span>
+    <ul class="nav-links-inner">
+      <li><a href="#concept">Concept</a></li>
+      <li><a href="#zones">Zones</a></li>
+      <li><a href="#operations">Operations</a></li>
+      <li><a href="#revenue">Revenue</a></li>
+    </ul>
+  </nav>
 
-    <div class="grid">
-      <div class="card card-pad col-8">
-        <h3>Concept Summary</h3>
-        <p>
-          I structured a large-scale hospitality concept combining dog accommodation, daycare,
-          training services, and a restaurant experience, supported by clear zoning and staffing logic.
+  <div class="container">
+
+    <!-- HERO -->
+    <div class="hero" id="concept">
+      <div class="hero-inner">
+        <div class="project-eyebrow">🐕 Hospitality Concept · Facility Planning</div>
+        <h1>Motel & Restaurant<br>for <span class="accent">Dogs</span></h1>
+        <p class="hero-desc">
+          A large-scale hospitality concept combining dog accommodation, daycare, training services,
+          and a restaurant experience — structured with clear facility zoning, capacity logic,
+          staffing design, and a defined revenue model built for scale.
         </p>
-
-        <h3 style="margin-top:16px;">Core Components</h3>
-        <ul class="list">
-          <li>Facility zoning (food / dog care / customer areas)</li>
-          <li>Capacity & throughput planning</li>
-          <li>Staff roles + shift design</li>
-          <li>Quality routines (cleaning, checklists, incident handling)</li>
-          <li>Go-to-market structure (membership + pre-booking logic)</li>
-        </ul>
-      </div>
-
-      <div class="card card-pad col-4">
-        <div class="badge">Meta</div>
-        <div class="small" style="margin-top:10px;">
-          <div><strong>Type:</strong> Concept</div>
-          <div><strong>Focus:</strong> Facility + ops</div>
-        </div>
-
-        <div style="margin-top:14px;">
-          <a class="btn" href="index.html">← Back to Home</a>
+        <div class="pills">
+          <span class="pill">🏨 Multi-service accommodation</span>
+          <span class="pill">🍽️ Restaurant operations</span>
+          <span class="pill">🐾 Dog training & daycare</span>
+          <span class="pill">📐 Facility zoning & layout</span>
         </div>
       </div>
     </div>
-  </section>
-</main>
 
-<script src="assets/app.js"></script>
+    <div class="divider"></div>
+
+    <!-- FACILITY ZONES -->
+    <div class="section" id="zones">
+      <div class="section-label">Facility Design</div>
+      <h2 class="section-title">Facility Zoning</h2>
+      <p class="section-sub">Clear spatial separation between service areas — hygiene, safety, and flow by design.</p>
+
+      <div class="zones-row reveal">
+        <div class="zone-item">
+          <div class="zone-icon">🍽️</div>
+          <div class="zone-name">Restaurant</div>
+          <div class="zone-desc">Dining & customer experience</div>
+        </div>
+        <div class="zone-item">
+          <div class="zone-icon">🛏️</div>
+          <div class="zone-name">Accommodation</div>
+          <div class="zone-desc">Overnight stays & kennels</div>
+        </div>
+        <div class="zone-item">
+          <div class="zone-icon">🎾</div>
+          <div class="zone-name">Daycare & Training</div>
+          <div class="zone-desc">Activity & socialization</div>
+        </div>
+        <div class="zone-item">
+          <div class="zone-icon">🧹</div>
+          <div class="zone-name">Hygiene & Staff</div>
+          <div class="zone-desc">Back-of-house operations</div>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div class="card reveal">
+          <h3>🏗️ Zoning Principles</h3>
+          <ul class="list">
+            <li>Strict separation between food preparation and animal care areas</li>
+            <li>Dedicated entry/exit flows for dogs and restaurant guests</li>
+            <li>Hygiene buffer zones between accommodation and dining</li>
+            <li>Staff-only corridors for efficient service without crossing guest areas</li>
+          </ul>
+        </div>
+        <div class="card orange reveal">
+          <h3>📐 Capacity Planning</h3>
+          <ul class="list">
+            <li>Defined max capacity per zone: kennel units, daycare group sizes, dining covers</li>
+            <li>Throughput planning for peak periods and seasonal demand</li>
+            <li>Buffer capacity for emergency stays and last-minute bookings</li>
+            <li>Scalable layout — modular expansion without full redesign</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- OPERATIONS -->
+    <div class="section" id="operations">
+      <div class="section-label">Operations Model</div>
+      <h2 class="section-title">Core Operations</h2>
+      <p class="section-sub">How the facility runs day-to-day — staffing, quality, and service routines.</p>
+
+      <div class="three-col">
+        <div class="card reveal">
+          <div class="arch-number">01</div>
+          <h3>Staffing & Shift Design</h3>
+          <ul class="list">
+            <li>Defined roles: dog care staff, restaurant team, reception, and maintenance</li>
+            <li>Shift structure covering all operating hours including overnight care</li>
+            <li>Clear handover protocols between shifts</li>
+            <li>On-call logic for emergencies or animal health incidents</li>
+          </ul>
+          <div class="card-tags">
+            <span class="ctag">Role definition</span>
+            <span class="ctag">Shift planning</span>
+            <span class="ctag">Handover protocols</span>
+          </div>
+        </div>
+
+        <div class="card reveal">
+          <div class="arch-number">02</div>
+          <h3>Quality & Hygiene Routines</h3>
+          <ul class="list">
+            <li>Daily cleaning checklists per zone — kitchen, kennels, outdoor areas</li>
+            <li>Hygiene separation enforced by physical layout and staff protocols</li>
+            <li>Incident handling procedure for animal health or behavioral issues</li>
+            <li>Regular audits to maintain standards as volume scales</li>
+          </ul>
+          <div class="card-tags">
+            <span class="ctag">Daily checklists</span>
+            <span class="ctag">Hygiene protocols</span>
+            <span class="ctag">Audit routines</span>
+          </div>
+        </div>
+
+        <div class="card reveal">
+          <div class="arch-number">03</div>
+          <h3>Booking & Guest Flow</h3>
+          <ul class="list">
+            <li>Pre-booking system for accommodation and daycare — prevents overbooking</li>
+            <li>Intake checklist for every arriving dog (health, vaccinations, behavior notes)</li>
+            <li>Structured check-in/check-out routine for smooth operations</li>
+            <li>Customer communication touchpoints: confirmation, updates, departure summary</li>
+          </ul>
+          <div class="card-tags">
+            <span class="ctag">Pre-booking logic</span>
+            <span class="ctag">Intake checklist</span>
+            <span class="ctag">Guest comms</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- REVENUE -->
+    <div class="section" id="revenue">
+      <div class="section-label">Business Model</div>
+      <h2 class="section-title">Revenue Structure</h2>
+      <p class="section-sub">Multiple service streams — designed for stable recurring revenue and upsell potential.</p>
+
+      <div class="two-col">
+        <div class="revenue-card reveal">
+          <h3>💰 Revenue Streams</h3>
+          <div class="revenue-streams">
+            <div class="revenue-item">
+              <span class="revenue-label">🛏️ Overnight accommodation</span>
+              <span class="revenue-tag">Core Revenue</span>
+            </div>
+            <div class="revenue-item">
+              <span class="revenue-label">🎾 Daycare packages</span>
+              <span class="revenue-tag">Recurring</span>
+            </div>
+            <div class="revenue-item">
+              <span class="revenue-label">🍽️ Restaurant — owners dining</span>
+              <span class="revenue-tag">Footfall</span>
+            </div>
+            <div class="revenue-item">
+              <span class="revenue-label">🐾 Training sessions</span>
+              <span class="revenue-tag">Premium Add-on</span>
+            </div>
+            <div class="revenue-item">
+              <span class="revenue-label">📦 Membership & pre-booking plans</span>
+              <span class="revenue-tag">Retention</span>
+            </div>
+            <div class="revenue-item">
+              <span class="revenue-label">🛍️ Grooming & retail products</span>
+              <span class="revenue-tag">Upsell</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card reveal">
+          <h3>📈 Go-to-Market Logic</h3>
+          <ul class="list">
+            <li>Membership model creates predictable recurring revenue and improves capacity planning</li>
+            <li>Pre-booking requirement reduces no-shows and smooths demand peaks</li>
+            <li>Restaurant draws walk-in foot traffic — converts to loyal repeat customers</li>
+            <li>Training upsells during daycare and accommodation naturally extend average spend</li>
+            <li>Loyalty program incentivizes long-term retention over one-off visits</li>
+          </ul>
+          <div class="card-tags" style="margin-top:1.5rem;">
+            <span class="ctag">Membership logic</span>
+            <span class="ctag">Demand smoothing</span>
+            <span class="ctag">Upsell design</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="quote-block">
+        "A hospitality concept built around one core insight: dog owners want the same quality standards for their dogs as they expect for themselves."
+      </div>
+
+      <a href="index.html" class="btn-back">← Back to Portfolio</a>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+      <span>© Petar Dojčinović — Motel & Restaurant for Dogs (Concept)</span>
+      <span style="color: var(--blue-light);">Operations & Process Development</span>
+    </footer>
+
+  </div>
+
+  <script>
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) {
+          setTimeout(() => e.target.classList.add('visible'), i * 80);
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    reveals.forEach(el => observer.observe(el));
+  </script>
+
 </body>
 </html>
