@@ -1,237 +1,677 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Project 02 — Emergency Access & Parking Safety System (Fire Scenario)</title>
-  <meta name="description" content="Case study: workplace safety + parking flow design ensuring emergency access and fire scenario readiness (anonymized)." />
-  <link rel="stylesheet" href="assets/styles.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Project 02 — Emergency Access & Parking Safety System</title>
+  <meta name="description" content="Case study: workplace safety + parking flow design ensuring emergency access and fire scenario readiness (anonymized)."/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #0a0c10;
+      --surface: #111318;
+      --surface2: #181c24;
+      --border: rgba(255,255,255,0.07);
+      --blue: #2f7fff;
+      --blue-light: #5a9fff;
+      --orange: #ff6b2b;
+      --orange-light: #ff9a6c;
+      --text: #e8eaf0;
+      --muted: #6b7280;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 0;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.2rem 4rem;
+      background: rgba(10,12,16,0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-back {
+      display: flex; align-items: center; gap: 0.6rem;
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 0.85rem;
+      letter-spacing: 0.05em;
+      transition: color 0.2s;
+    }
+    .nav-back:hover { color: var(--text); }
+    .nav-badge {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.8rem;
+      background: rgba(255,107,43,0.12);
+      border: 1px solid rgba(255,107,43,0.25);
+      color: var(--orange-light);
+      border-radius: 2rem;
+    }
+    .nav-links-inner {
+      display: flex; gap: 2rem; list-style: none;
+    }
+    .nav-links-inner a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.82rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links-inner a:hover { color: var(--text); }
+
+    /* LAYOUT */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 4rem;
+    }
+
+    /* HERO */
+    .hero {
+      padding: 9rem 0 5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::after {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,107,43,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,107,43,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+    }
+    .hero-inner { position: relative; z-index: 1; }
+
+    .project-eyebrow {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: rgba(255,107,43,0.08);
+      border: 1px solid rgba(255,107,43,0.2);
+      border-radius: 2rem;
+      padding: 0.4rem 1rem;
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--orange-light);
+      margin-bottom: 1.5rem;
+      animation: fadeUp 0.6s ease both;
+    }
+
+    .hero h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.2rem;
+      animation: fadeUp 0.6s 0.1s ease both;
+    }
+    .hero h1 .accent { color: var(--orange); }
+
+    .hero-desc {
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 700px;
+      margin-bottom: 2rem;
+      animation: fadeUp 0.6s 0.2s ease both;
+    }
+
+    .pills {
+      display: flex; flex-wrap: wrap; gap: 0.6rem;
+      animation: fadeUp 0.6s 0.3s ease both;
+    }
+    .pill {
+      padding: 0.35rem 0.9rem;
+      border: 1px solid var(--border);
+      border-radius: 0.3rem;
+      font-size: 0.78rem;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+      background: var(--surface);
+    }
+
+    /* DIVIDER */
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+    }
+
+    /* SECTIONS */
+    .section { padding: 5rem 0; }
+
+    .section-label {
+      display: flex; align-items: center; gap: 1rem;
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 0.7rem;
+    }
+    .section-label::after {
+      content: '';
+      flex: 1; max-width: 60px;
+      height: 1px;
+      background: var(--orange);
+      opacity: 0.5;
+    }
+    .section-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(1.5rem, 3vw, 2.2rem);
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 0.5rem;
+    }
+    .section-sub {
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin-bottom: 2.5rem;
+    }
+
+    /* CARDS */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 0.8rem;
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.25s;
+    }
+    .card:hover { border-color: rgba(255,107,43,0.2); }
+    .card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--orange), transparent);
+    }
+    .card.blue::before { background: linear-gradient(90deg, var(--blue), transparent); }
+    .card.blue:hover { border-color: rgba(47,127,255,0.2); }
+
+    .card h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: var(--text);
+    }
+
+    .list {
+      list-style: none;
+      display: flex; flex-direction: column; gap: 0.55rem;
+    }
+    .list li {
+      font-size: 0.88rem;
+      color: var(--muted);
+      display: flex; align-items: flex-start; gap: 0.7rem;
+      line-height: 1.5;
+    }
+    .list li::before {
+      content: '▸';
+      color: var(--orange);
+      font-size: 0.7rem;
+      flex-shrink: 0;
+      margin-top: 0.25rem;
+    }
+    .card.blue .list li::before { color: var(--blue); }
+
+    .card-tags {
+      display: flex; flex-wrap: wrap; gap: 0.5rem;
+      margin-top: 1.2rem;
+    }
+    .ctag {
+      font-size: 0.72rem;
+      padding: 0.2rem 0.6rem;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 0.25rem;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+    }
+
+    /* GRIDS */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    .three-col { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+
+    /* ARCH steps */
+    .arch-number {
+      font-family: 'Syne', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--surface2);
+      line-height: 1;
+      margin-bottom: 0.8rem;
+      transition: color 0.3s;
+    }
+    .card:hover .arch-number { color: rgba(255,107,43,0.2); }
+
+    /* RISK INDICATORS ROW */
+    .risk-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 0.8rem;
+      overflow: hidden;
+      margin-bottom: 2rem;
+    }
+    .risk-item {
+      background: var(--surface);
+      padding: 1.5rem;
+      text-align: center;
+      transition: background 0.2s;
+    }
+    .risk-item:hover { background: var(--surface2); }
+    .risk-icon { font-size: 1.8rem; margin-bottom: 0.5rem; }
+    .risk-label {
+      font-size: 0.75rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      line-height: 1.4;
+    }
+
+    /* IMPACT grid */
+    .impact-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; }
+
+    /* DELIVERY STYLE card */
+    .delivery-card {
+      background: linear-gradient(135deg, rgba(255,107,43,0.1), rgba(255,107,43,0.04));
+      border: 1px solid rgba(255,107,43,0.2);
+      border-radius: 0.8rem;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .delivery-label {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--orange-light);
+    }
+    .delivery-flow {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .delivery-step {
+      display: flex; align-items: center; gap: 0.7rem;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+    .delivery-step .step-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--orange);
+      flex-shrink: 0;
+    }
+
+    /* QUOTE */
+    .quote-block {
+      margin-top: 2.5rem;
+      padding: 1.5rem 2rem;
+      border-left: 3px solid var(--orange);
+      background: rgba(255,107,43,0.04);
+      border-radius: 0 0.5rem 0.5rem 0;
+      font-style: italic;
+      font-size: 1rem;
+      color: var(--muted);
+    }
+
+    /* BACK BUTTON */
+    .btn-back {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      padding: 0.85rem 2rem;
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 0.4rem;
+      font-family: 'Syne', sans-serif;
+      font-weight: 600;
+      font-size: 0.85rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: border-color 0.2s, color 0.2s;
+      margin-top: 2rem;
+      display: inline-flex;
+    }
+    .btn-back:hover { border-color: var(--blue); color: var(--blue-light); }
+
+    /* FOOTER */
+    footer {
+      padding: 1.5rem 0;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 2rem;
+    }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .reveal {
+      opacity: 0; transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links-inner { display: none; }
+      .container { padding: 0 1.5rem; }
+      .hero { padding: 7rem 0 3rem; }
+      .two-col, .three-col { grid-template-columns: 1fr; }
+      .risk-row { grid-template-columns: 1fr 1fr; }
+      .impact-grid { grid-template-columns: 1fr; }
+      footer { flex-direction: column; gap: 0.5rem; }
+    }
+  </style>
 </head>
-
 <body>
-  <header class="nav">
-    <div class="container nav-inner">
-      <div class="brand">
-        <a href="index.html">← Portfolio</a>
-        <span class="badge">Project 02</span>
-      </div>
-      <nav class="nav-links">
-        <a href="#overview">Overview</a>
-        <a href="#approach">Approach</a>
-        <a href="#controls">Controls</a>
-        <a href="#impact">Impact</a>
-      </nav>
-    </div>
-  </header>
 
-  <main class="container">
-    <section class="hero" id="overview">
-      <div class="card card-pad">
-        <h1 class="h-title">Emergency Access & Parking Safety System</h1>
-        <p class="h-sub">
-          An anonymized operational safety project focusing on parking flow, emergency route clearance, and fire-scenario readiness.
-          The objective was to reduce risk by ensuring emergency vehicles can access critical areas and evacuation routes remain unobstructed.
+  <!-- NAV -->
+  <nav>
+    <a href="index.html" class="nav-back">← Portfolio</a>
+    <span class="nav-badge">Project 02 · Safety / HSE</span>
+    <ul class="nav-links-inner">
+      <li><a href="#overview">Overview</a></li>
+      <li><a href="#approach">Approach</a></li>
+      <li><a href="#controls">Controls</a></li>
+      <li><a href="#impact">Impact</a></li>
+    </ul>
+  </nav>
+
+  <div class="container">
+
+    <!-- HERO -->
+    <div class="hero" id="overview">
+      <div class="hero-inner">
+        <div class="project-eyebrow">🔥 Safety & HSE · Anonymized Case Study</div>
+        <h1>Emergency Access &<br><span class="accent">Parking Safety System</span></h1>
+        <p class="hero-desc">
+          An operational safety project focused on parking flow, emergency route clearance, and fire-scenario readiness.
+          The goal: ensure emergency vehicles can always reach critical areas — and that evacuation routes stay clear when it matters most.
         </p>
-
-        <div class="kpis">
+        <div class="pills">
           <span class="pill">🔥 Fire scenario readiness</span>
           <span class="pill">🚒 Emergency vehicle access</span>
           <span class="pill">🅿️ Parking flow & site rules</span>
           <span class="pill">✅ Safety-first controls</span>
         </div>
+      </div>
+    </div>
 
-        <hr class="hr" />
+    <div class="divider"></div>
 
-        <div class="grid">
-          <div class="col-6">
-            <h3 style="margin:0 0 8px;">Operational Risk Context</h3>
-            <ul class="list">
-              <li>Workplace parking located directly next to a main public road with heavy traffic flow</li>
-              <li>High pedestrian presence, including school children during peak hours</li>
-              <li>Unstructured parking patterns increasing exit risk</li>
-              <li>Potential evacuation congestion during fire scenario</li>
-            </ul>
-          </div>
+    <!-- RISK CONTEXT -->
+    <div class="section" id="overview-detail">
+      <div class="section-label">Risk Context</div>
+      <h2 class="section-title">Operational Risk & Primary Objective</h2>
+      <p class="section-sub">What was happening on the ground — and what needed to change.</p>
 
-          <div class="col-6">
-            <h3 style="margin:0 0 8px;">Primary Objective</h3>
-            <ul class="list">
-              <li>Create a standardized parking structure for all employees</li>
-              <li>Improve visibility and safety during vehicle exit to main road</li>
-              <li>Ensure faster and safer evacuation in case of fire</li>
-              <li>Establish clear assembly and communication protocol during emergency</li>
-            </ul>
-          </div>
+      <div class="risk-row reveal">
+        <div class="risk-item">
+          <div class="risk-icon">🛣️</div>
+          <div class="risk-label">Heavy traffic road adjacent to workplace parking</div>
         </div>
-
-        <p class="small" style="margin-top:12px;">
-          Note: company name and site identifiers are intentionally omitted to respect confidentiality.
-        </p>
+        <div class="risk-item">
+          <div class="risk-icon">🚶</div>
+          <div class="risk-label">High pedestrian flow incl. school children at peak hours</div>
+        </div>
+        <div class="risk-item">
+          <div class="risk-icon">🅿️</div>
+          <div class="risk-label">Unstructured parking patterns increasing exit risk</div>
+        </div>
+        <div class="risk-item">
+          <div class="risk-icon">🚨</div>
+          <div class="risk-label">Potential evacuation congestion during fire scenario</div>
+        </div>
       </div>
-    </section>
 
-    <section class="section" id="approach">
-      <div class="section-title">
-        <h2>Approach</h2>
-        <p>From risk observation → system design → adoption</p>
+      <div class="two-col">
+        <div class="card reveal">
+          <h3>🔴 Risk Observations</h3>
+          <ul class="list">
+            <li>Workplace parking located directly adjacent to a high-traffic main road</li>
+            <li>High pedestrian presence — including school children — during peak hours</li>
+            <li>No standardized parking method, leading to poor exit visibility</li>
+            <li>Potential evacuation bottlenecks identified in fire scenario planning</li>
+          </ul>
+        </div>
+        <div class="card blue reveal">
+          <h3>🎯 Primary Objectives</h3>
+          <ul class="list">
+            <li>Standardize parking across all employees for consistent site behavior</li>
+            <li>Improve exit visibility and safety to the main road</li>
+            <li>Ensure faster, safer evacuation flow in fire scenarios</li>
+            <li>Establish a clear assembly point and communication protocol</li>
+          </ul>
+        </div>
       </div>
+    </div>
 
-      <div class="grid">
-        <div class="card card-pad col-4">
-          <h3>1) Site mapping</h3>
-          <p>
+    <div class="divider"></div>
+
+    <!-- APPROACH -->
+    <div class="section" id="approach">
+      <div class="section-label">Process</div>
+      <h2 class="section-title">Approach</h2>
+      <p class="section-sub">From risk observation → system design → organizational adoption</p>
+
+      <div class="three-col">
+        <div class="card reveal">
+          <div class="arch-number">01</div>
+          <h3>Site Mapping</h3>
+          <p style="font-size:0.88rem; color:var(--muted); margin-bottom:1rem;">
             Identified critical emergency routes, access points, assembly areas, and high-risk congestion zones.
-            Reviewed peak-time behaviors (shift change, deliveries, visitor arrivals).
+            Reviewed peak-time behaviors including shift changes, deliveries, and visitor arrivals.
           </p>
-          <div class="meta">
-            <span class="tag">Risk mapping</span>
-            <span class="tag">Flow analysis</span>
+          <div class="card-tags">
+            <span class="ctag">Risk mapping</span>
+            <span class="ctag">Flow analysis</span>
+            <span class="ctag">Peak-time review</span>
           </div>
         </div>
 
-        <div class="card card-pad col-4">
-          <h3>2) Parking & flow rules</h3>
-          <p>
-            Defined a unified parking method: all vehicles parked in reverse for improved road visibility upon exit.
-            Standardized parking alignment reduces confusion and enables faster departure during emergency situations.
-            Clear assembly points were defined and communicated across departments.
+        <div class="card reveal">
+          <div class="arch-number">02</div>
+          <h3>Parking & Flow Rules</h3>
+          <p style="font-size:0.88rem; color:var(--muted); margin-bottom:1rem;">
+            Defined a unified parking method — all vehicles parked in reverse for improved road visibility on exit.
+            Standardized alignment reduces confusion and enables faster departure during emergencies.
+            Assembly points defined and communicated across departments.
           </p>
-          <div class="meta">
-            <span class="tag">Reverse parking</span>
-            <span class="tag">Standardization</span>
-            <span class="tag">Assembly point</span>
+          <div class="card-tags">
+            <span class="ctag">Reverse parking</span>
+            <span class="ctag">Standardization</span>
+            <span class="ctag">Assembly point</span>
           </div>
         </div>
 
-        <div class="card card-pad col-4">
-          <h3>3) Adoption plan</h3>
-          <p>
-            Alignment with security and management: simple communication package (signage + brief instructions),
-            clear routines, and consistent follow-up.
-            The proposal was accepted and scheduled for implementation after the summer period.
+        <div class="card reveal">
+          <div class="arch-number">03</div>
+          <h3>Adoption Plan</h3>
+          <p style="font-size:0.88rem; color:var(--muted); margin-bottom:1rem;">
+            Aligned with security and management. Delivered a simple communication package —
+            signage, brief instructions, and clear routines. Proposal accepted and scheduled
+            for implementation after the summer period.
           </p>
-          <div class="meta">
-            <span class="tag">Security</span>
-            <span class="tag">Management</span>
-            <span class="tag">Implementation plan</span>
+          <div class="card-tags">
+            <span class="ctag">Management alignment</span>
+            <span class="ctag">Signage</span>
+            <span class="ctag">Implementation plan</span>
           </div>
         </div>
       </div>
-    </section>
+    </div>
 
-    <section class="section" id="controls">
-      <div class="section-title">
-        <h2>Controls & System Elements</h2>
-        <p>Practical mechanisms that keep the system working</p>
+    <div class="divider"></div>
+
+    <!-- CONTROLS -->
+    <div class="section" id="controls">
+      <div class="section-label">System Design</div>
+      <h2 class="section-title">Controls & System Elements</h2>
+      <p class="section-sub">Practical mechanisms that keep the system working day-to-day.</p>
+
+      <div class="two-col" style="margin-bottom:1.5rem;">
+        <div class="card reveal">
+          <h3>👁️ Visual Controls</h3>
+          <ul class="list">
+            <li>Marked emergency lanes and clearly defined "no parking" zones</li>
+            <li>Directional flow signage — entry/exit points, one-way sections</li>
+            <li>Designated assembly points with clear labeling</li>
+            <li>Parking layout guidance to reinforce reverse parking standard</li>
+          </ul>
+        </div>
+        <div class="card blue reveal">
+          <h3>⚙️ Operational Controls</h3>
+          <ul class="list">
+            <li>Daily/weekly checklist for emergency route clearance verification</li>
+            <li>Peak-time supervision routine during shift changes</li>
+            <li>Defined escalation steps for repeated rule violations</li>
+            <li>Fire scenario protocol: move to assembly point, coordinate with fire services</li>
+          </ul>
+        </div>
       </div>
 
-      <div class="grid">
-        <div class="card card-pad col-6">
-          <h3>Visual controls</h3>
+      <div class="card reveal" style="margin-bottom:1.5rem;">
+        <h3>🚨 Emergency Protocol Alignment</h3>
+        <div class="two-col" style="margin-top:0.5rem;">
           <ul class="list">
-            <li>Marked emergency lanes and “no parking” zones</li>
-            <li>Directional flow signage (entry/exit, one-way sections)</li>
-            <li>Designated assembly points clearly labeled</li>
-            <li>Parking layout guidance to support reverse parking</li>
+            <li>Mandatory inter-department communication during any incident</li>
+            <li>All personnel directed to designated assembly point immediately</li>
           </ul>
-        </div>
-
-        <div class="card card-pad col-6">
-          <h3>Operational controls</h3>
           <ul class="list">
-            <li>Daily/weekly checklist for route clearance</li>
-            <li>Peak-time supervision routine (shift changes)</li>
-            <li>Escalation steps for repeated violations</li>
-            <li>Fire scenario protocol: move to assembly point and coordinate next steps</li>
-          </ul>
-        </div>
-
-        <div class="card card-pad col-12">
-          <h3>Emergency Protocol Alignment</h3>
-          <ul class="list">
-            <li>Mandatory inter-department communication during incident</li>
-            <li>All personnel move to designated assembly point</li>
-            <li>Further actions coordinated with fire services</li>
+            <li>Further actions coordinated with fire services on-scene</li>
             <li>Decision logic: remain on-site or controlled evacuation based on authority guidance</li>
           </ul>
         </div>
+      </div>
 
-        <div class="card card-pad col-12">
-          <h3>Optional improvements (scalable)</h3>
-          <div class="grid">
-            <div class="col-6">
-              <ul class="list">
-                <li>Simple permit system for limited zones</li>
-                <li>Incident log for blocked routes (quick reporting)</li>
-                <li>Time-based restrictions for deliveries</li>
-              </ul>
-            </div>
-            <div class="col-6">
-              <ul class="list">
-                <li>Periodic audits with a simple scorecard</li>
-                <li>Continuous improvement loop after each drill/event</li>
-                <li>Short refresher communication before high-risk periods</li>
-              </ul>
-            </div>
+      <div class="card blue reveal">
+        <h3>📈 Optional Improvements (Scalable)</h3>
+        <div class="two-col" style="margin-top:0.5rem;">
+          <ul class="list">
+            <li>Simple permit system for access-controlled zones</li>
+            <li>Incident log for blocked routes (quick digital reporting)</li>
+            <li>Time-based delivery restrictions during peak hours</li>
+          </ul>
+          <ul class="list">
+            <li>Periodic audits with a simple compliance scorecard</li>
+            <li>Continuous improvement loop after drills or incidents</li>
+            <li>Short refresher communication before high-risk seasonal periods</li>
+          </ul>
+        </div>
+        <p style="font-size:0.8rem; color:var(--muted); margin-top:1.2rem;">
+          All controls designed to be low-cost and enforceable — prioritizing safety and response time above complexity.
+        </p>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- IMPACT -->
+    <div class="section" id="impact">
+      <div class="section-label">Results</div>
+      <h2 class="section-title">Expected Impact</h2>
+      <p class="section-sub">Safety readiness and operational predictability — not just compliance on paper.</p>
+
+      <div class="impact-grid">
+        <div class="card reveal">
+          <h3>📋 Operational Outcomes</h3>
+          <ul class="list">
+            <li>Reduced probability of blocked emergency access at any time</li>
+            <li>Improved exit safety to the main road through structured visibility</li>
+            <li>Faster, more reliable evacuation flow under fire scenario conditions</li>
+            <li>Higher employee compliance through clear, simple rules and daily routines</li>
+          </ul>
+          <h3 style="margin-top:1.5rem;">📏 Measurement Logic</h3>
+          <ul class="list" style="margin-top:0.5rem;">
+            <li>Primary KPI: risk reduction and confirmed emergency readiness</li>
+            <li>Emergency lane compliance tracked via visual inspection routine</li>
+            <li>Evacuation flow quality assessed during scheduled drills</li>
+          </ul>
+          <p style="font-size:0.82rem; color:var(--muted); margin-top:1rem; font-style:italic;">
+            This initiative prioritizes prevention over pure performance metrics.
+            Employee safety — and the safety of the surrounding community — is the primary outcome.
+          </p>
+        </div>
+
+        <div class="delivery-card reveal">
+          <div class="delivery-label">Delivery Style</div>
+          <p style="font-size:0.88rem; color:var(--muted);">
+            Safety systems delivered as practical operational frameworks — not theoretical documents.
+          </p>
+          <div class="delivery-flow">
+            <div class="delivery-step"><span class="step-dot"></span> Risk mapping</div>
+            <div class="delivery-step"><span class="step-dot"></span> Rule definition</div>
+            <div class="delivery-step"><span class="step-dot"></span> Visual controls</div>
+            <div class="delivery-step"><span class="step-dot"></span> Routines & follow-up</div>
+            <div class="delivery-step"><span class="step-dot"></span> Periodic audits</div>
           </div>
-          <p class="small" style="margin-top:10px;">
-            Controls are designed to be low-cost and enforceable, prioritizing safety and response time.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="impact">
-      <div class="section-title">
-        <h2>Expected Impact</h2>
-        <p>Safety readiness + operational predictability</p>
-      </div>
-
-      <div class="grid">
-        <div class="card card-pad col-8">
-          <h3>Operational outcomes</h3>
-          <ul class="list">
-            <li>Reduced probability of blocked emergency access</li>
-            <li>Improved exit safety to the main road through better visibility</li>
-            <li>Faster, more reliable evacuation flow under fire scenario</li>
-            <li>Higher compliance through clear rules + routines</li>
-          </ul>
-
-          <h3 style="margin-top:14px;">Measurement Logic</h3>
-          <ul class="list">
-            <li>Primary KPI: risk reduction and emergency readiness</li>
-            <li>Clear emergency lane compliance (visual inspection routine)</li>
-            <li>Structured evacuation flow during drills</li>
-          </ul>
-
-          <p class="small" style="margin-top:10px;">
-            This initiative prioritizes prevention over numerical performance indicators.
-            Safety of employees and surrounding community outweighs purely operational metrics.
-          </p>
-        </div>
-
-        <div class="card card-pad col-4">
-          <div class="badge">Delivery style</div>
-          <p class="small" style="margin-top:10px;">
-            I deliver safety systems as practical operational frameworks:
-            mapping → rules → visuals → routines → audits.
-          </p>
-          <hr class="hr" />
-          <a class="btn primary" href="index.html">🏠 Back to portfolio</a>
         </div>
       </div>
 
-      <hr class="hr" />
-      <blockquote>
-        Better to be prepared and react early than be surprised by an incident.
-      </blockquote>
-    </section>
+      <div class="quote-block">
+        "Better to be prepared and react early — than be surprised by an incident."
+      </div>
 
-    <footer class="footer">
-      <div>© <span id="year"></span> Petar Dojčinović — Project 02 (Anonymized)</div>
+      <a href="index.html" class="btn-back">← Back to Portfolio</a>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+      <span>© Petar Dojčinović — Project 02 (Anonymized)</span>
+      <span style="color: var(--orange);">Operations & Process Development</span>
     </footer>
-  </main>
 
-  <script src="assets/app.js"></script>
+  </div>
+
+  <script>
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) {
+          setTimeout(() => e.target.classList.add('visible'), i * 80);
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    reveals.forEach(el => observer.observe(el));
+  </script>
+
 </body>
 </html>
