@@ -1,178 +1,635 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Project 01 — Digital Production Monitoring & OEE Framework</title>
-  <meta name="description" content="Case study: digital production monitoring, KPI framework, downtime analysis, and preventive maintenance logic (anonymized)." />
-  <link rel="stylesheet" href="assets/styles.css" />
+  <meta name="description" content="Case study: digital production monitoring, KPI framework, downtime analysis, and preventive maintenance logic (anonymized)."/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #0a0c10;
+      --surface: #111318;
+      --surface2: #181c24;
+      --border: rgba(255,255,255,0.07);
+      --blue: #2f7fff;
+      --blue-light: #5a9fff;
+      --orange: #ff6b2b;
+      --orange-light: #ff9a6c;
+      --text: #e8eaf0;
+      --muted: #6b7280;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 0;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.2rem 4rem;
+      background: rgba(10,12,16,0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-back {
+      display: flex; align-items: center; gap: 0.6rem;
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 0.85rem;
+      letter-spacing: 0.05em;
+      transition: color 0.2s;
+    }
+    .nav-back:hover { color: var(--text); }
+    .nav-back span { font-size: 1rem; }
+    .nav-badge {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.8rem;
+      background: rgba(255,107,43,0.12);
+      border: 1px solid rgba(255,107,43,0.25);
+      color: var(--orange-light);
+      border-radius: 2rem;
+    }
+    .nav-links-inner {
+      display: flex; gap: 2rem; list-style: none;
+    }
+    .nav-links-inner a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.82rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links-inner a:hover { color: var(--text); }
+
+    /* LAYOUT */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 4rem;
+    }
+
+    /* HERO */
+    .hero {
+      padding: 9rem 0 5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::after {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(47,127,255,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(47,127,255,0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+    }
+    .hero-inner { position: relative; z-index: 1; }
+
+    .project-eyebrow {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: rgba(255,107,43,0.08);
+      border: 1px solid rgba(255,107,43,0.2);
+      border-radius: 2rem;
+      padding: 0.4rem 1rem;
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--orange-light);
+      margin-bottom: 1.5rem;
+      animation: fadeUp 0.6s ease both;
+    }
+
+    .hero h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.2rem;
+      animation: fadeUp 0.6s 0.1s ease both;
+    }
+    .hero h1 .accent { color: var(--orange); }
+
+    .hero-desc {
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 700px;
+      margin-bottom: 2rem;
+      animation: fadeUp 0.6s 0.2s ease both;
+    }
+
+    .pills {
+      display: flex; flex-wrap: wrap; gap: 0.6rem;
+      animation: fadeUp 0.6s 0.3s ease both;
+    }
+    .pill {
+      padding: 0.35rem 0.9rem;
+      border: 1px solid var(--border);
+      border-radius: 0.3rem;
+      font-size: 0.78rem;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+      background: var(--surface);
+    }
+
+    /* DIVIDER */
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin: 0;
+    }
+
+    /* SECTIONS */
+    .section {
+      padding: 5rem 0;
+    }
+
+    .section-label {
+      display: flex; align-items: center; gap: 1rem;
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 0.7rem;
+    }
+    .section-label::after {
+      content: '';
+      flex: 1; max-width: 60px;
+      height: 1px;
+      background: var(--orange);
+      opacity: 0.5;
+    }
+    .section-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(1.5rem, 3vw, 2.2rem);
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 0.5rem;
+    }
+    .section-sub {
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin-bottom: 2.5rem;
+    }
+
+    /* CHALLENGE / GOAL grid */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    /* CARDS */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 0.8rem;
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.25s;
+    }
+    .card:hover { border-color: rgba(47,127,255,0.2); }
+    .card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--orange), transparent);
+    }
+    .card.blue::before { background: linear-gradient(90deg, var(--blue), transparent); }
+
+    .card h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: var(--text);
+    }
+
+    .list {
+      list-style: none;
+      display: flex; flex-direction: column; gap: 0.55rem;
+    }
+    .list li {
+      font-size: 0.88rem;
+      color: var(--muted);
+      display: flex; align-items: flex-start; gap: 0.7rem;
+      line-height: 1.5;
+    }
+    .list li::before {
+      content: '▸';
+      color: var(--orange);
+      font-size: 0.7rem;
+      flex-shrink: 0;
+      margin-top: 0.25rem;
+    }
+    .card.blue .list li::before { color: var(--blue); }
+
+    .card-tags {
+      display: flex; flex-wrap: wrap; gap: 0.5rem;
+      margin-top: 1.2rem;
+    }
+    .ctag {
+      font-size: 0.72rem;
+      padding: 0.2rem 0.6rem;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 0.25rem;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+    }
+
+    /* ARCHITECTURE 3-col */
+    .three-col {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+    .arch-number {
+      font-family: 'Syne', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--surface2);
+      line-height: 1;
+      margin-bottom: 0.8rem;
+    }
+    .card:hover .arch-number { color: rgba(47,127,255,0.15); }
+
+    /* KPI metrics row */
+    .kpi-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 0.8rem;
+      overflow: hidden;
+      margin-bottom: 1.5rem;
+    }
+    .kpi-item {
+      background: var(--surface);
+      padding: 1.5rem;
+      text-align: center;
+    }
+    .kpi-item:hover { background: var(--surface2); }
+    .kpi-val {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--blue-light);
+      line-height: 1;
+      margin-bottom: 0.4rem;
+    }
+    .kpi-label {
+      font-size: 0.75rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .kpi-target {
+      font-size: 0.72rem;
+      color: var(--orange);
+      margin-top: 0.3rem;
+    }
+
+    /* IMPACT section */
+    .impact-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 1.5rem;
+    }
+
+    .roi-card {
+      background: linear-gradient(135deg, rgba(47,127,255,0.1), rgba(47,127,255,0.04));
+      border: 1px solid rgba(47,127,255,0.2);
+      border-radius: 0.8rem;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .roi-label {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--blue-light);
+    }
+    .roi-val {
+      font-family: 'Syne', sans-serif;
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--blue-light);
+      line-height: 1;
+    }
+    .roi-desc {
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* BACK BUTTON */
+    .btn-back {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      padding: 0.85rem 2rem;
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 0.4rem;
+      font-family: 'Syne', sans-serif;
+      font-weight: 600;
+      font-size: 0.85rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: border-color 0.2s, color 0.2s;
+      margin-top: 1rem;
+    }
+    .btn-back:hover { border-color: var(--blue); color: var(--blue-light); }
+
+    /* FOOTER */
+    footer {
+      padding: 1.5rem 0;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .reveal {
+      opacity: 0; transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links-inner { display: none; }
+      .container { padding: 0 1.5rem; }
+      .hero { padding: 7rem 0 3rem; }
+      .two-col, .three-col { grid-template-columns: 1fr; }
+      .kpi-row { grid-template-columns: 1fr 1fr; }
+      .impact-grid { grid-template-columns: 1fr; }
+      footer { flex-direction: column; gap: 0.5rem; }
+    }
+  </style>
 </head>
-
 <body>
-  <header class="nav">
-    <div class="container nav-inner">
-      <div class="brand">
-        <a href="index.html">← Portfolio</a>
-        <span class="badge">Project 01</span>
-      </div>
-      <nav class="nav-links">
-        <a href="#overview">Overview</a>
-        <a href="#architecture">Architecture</a>
-        <a href="#kpis">KPIs</a>
-        <a href="#impact">Impact</a>
-      </nav>
-    </div>
-  </header>
 
-  <main class="container">
-    <section class="hero" id="overview">
-      <div class="card card-pad">
-        <h1 class="h-title">Digital Production Monitoring & OEE Framework</h1>
-        <p class="h-sub">
-          An anonymized industrial case study: I designed a structured data capture model and a Power BI reporting system
-          enabling shift transparency, downtime classification, trend analysis, team performance follow-up, and preventive action planning.
+  <!-- NAV -->
+  <nav>
+    <a href="index.html" class="nav-back"><span>←</span> Portfolio</a>
+    <span class="nav-badge">Project 01 · Industrial</span>
+    <ul class="nav-links-inner">
+      <li><a href="#overview">Overview</a></li>
+      <li><a href="#architecture">Architecture</a></li>
+      <li><a href="#kpis">KPIs</a></li>
+      <li><a href="#impact">Impact</a></li>
+    </ul>
+  </nav>
+
+  <div class="container">
+
+    <!-- HERO -->
+    <div class="hero" id="overview">
+      <div class="hero-inner">
+        <div class="project-eyebrow">⚙️ Industrial Operations · Anonymized Case Study</div>
+        <h1>Digital Production Monitoring<br>& <span class="accent">OEE Framework</span></h1>
+        <p class="hero-desc">
+          A structured data capture model and Power BI reporting system designed for shift-level transparency,
+          downtime classification, trend analysis, team performance follow-up, and preventive action planning —
+          deployed in a high-volume production environment.
         </p>
-
-        <div class="kpis">
+        <div class="pills">
           <span class="pill">🏭 High-volume production context</span>
-          <span class="pill">📊 Power BI + Excel (SharePoint/OneDrive-ready)</span>
+          <span class="pill">📊 Power BI + Excel</span>
           <span class="pill">🧠 RCA workflows (5 Why / Ishikawa)</span>
-          <span class="pill">⏱️ OEE / MTBF / MTTR focus</span>
-        </div>
-
-        <hr class="hr" />
-
-        <div class="grid">
-          <div class="col-6">
-            <h3 style="margin:0 0 8px;">Challenge</h3>
-            <ul class="list">
-              <li>Lack of standardized shift data collection</li>
-              <li>Inconsistent downtime reporting and weak root-cause visibility</li>
-              <li>No reliable historical analysis of recurring failures</li>
-              <li>Reactive maintenance dominating instead of preventive planning</li>
-            </ul>
-          </div>
-
-          <div class="col-6">
-            <h3 style="margin:0 0 8px;">Goal</h3>
-            <ul class="list">
-              <li>Build a simple operator-friendly input structure</li>
-              <li>Create real-time dashboards for production + maintenance</li>
-              <li>Identify top downtime drivers using Pareto logic</li>
-              <li>Enable preventive actions based on actual operational data</li>
-            </ul>
-          </div>
+          <span class="pill">⏱️ OEE / MTBF / MTTR</span>
         </div>
       </div>
-    </section>
+    </div>
 
-    <section class="section" id="architecture">
-      <div class="section-title">
-        <h2>Solution Architecture</h2>
-        <p>3-layer model: Input → Storage → Visualization</p>
-      </div>
+    <div class="divider"></div>
 
-      <div class="grid">
-        <div class="card card-pad col-4">
-          <h3>1) Data input</h3>
-          <p>Standardized shift-level Excel templates for operators: production, downtime, reason codes, comments.</p>
-          <div class="meta">
-            <span class="tag">Validation lists</span>
-            <span class="tag">Reason codes</span>
-          </div>
-        </div>
+    <!-- CHALLENGE & GOAL -->
+    <div class="section">
+      <div class="section-label">Context</div>
+      <h2 class="section-title">Challenge & Goal</h2>
+      <p class="section-sub">What the operation lacked — and what this project set out to fix.</p>
 
-        <div class="card card-pad col-4">
-          <h3>2) Storage</h3>
-          <p>Central file storage (SharePoint / OneDrive / network share) to keep one single source of truth.</p>
-          <div class="meta">
-            <span class="tag">Version control</span>
-            <span class="tag">Access roles</span>
-          </div>
-        </div>
-
-        <div class="card card-pad col-4">
-          <h3>3) Analytics</h3>
-          <p>Power BI model with scheduled refresh and interactive dashboards for different roles.</p>
-          <div class="meta">
-            <span class="tag">Power Query</span>
-            <span class="tag">DAX measures</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="kpis">
-      <div class="section-title">
-        <h2>KPI Framework</h2>
-        <p>Operational visibility and maintenance readiness</p>
-      </div>
-
-      <div class="grid">
-        <div class="card card-pad col-6">
-          <h3>Core KPIs</h3>
+      <div class="two-col">
+        <div class="card reveal">
+          <h3>🔴 The Challenge</h3>
           <ul class="list">
-            <li>OEE (availability × performance × quality), target ≥ 85%</li>
-            <li>MTBF (mean time between failures), target ≥ 200 hours</li>
-            <li>MTTR (mean time to repair), target ≤ 2 hours</li>
-            <li>Downtime share, target ≤ 5%</li>
+            <li>No standardized shift data collection in place</li>
+            <li>Inconsistent downtime reporting and weak root-cause visibility</li>
+            <li>No reliable historical analysis of recurring failures</li>
+            <li>Reactive maintenance dominating — preventive planning nearly absent</li>
           </ul>
-          <p class="small" style="margin-top:10px;">
-            KPI definitions and target logic are implemented as calculated measures for consistent reporting. :contentReference[oaicite:1]{index=1}
-          </p>
         </div>
 
-        <div class="card card-pad col-6">
-          <h3>Failure analysis & RCA</h3>
+        <div class="card blue reveal">
+          <h3>🎯 The Goal</h3>
           <ul class="list">
-            <li>3-level downtime categorization (type → category → specific fault)</li>
-            <li>Pareto (80/20) to identify top drivers of downtime</li>
-            <li>RCA workflow: 5 Why + Ishikawa + action plan + follow-up reminders</li>
+            <li>Build a simple, operator-friendly input structure</li>
+            <li>Create real-time dashboards for production & maintenance teams</li>
+            <li>Identify top downtime drivers using Pareto logic</li>
+            <li>Enable preventive actions grounded in actual operational data</li>
           </ul>
-          <p class="small" style="margin-top:10px;">
-            The objective is to stop repeat failures through structured learning loops. :contentReference[oaicite:2]{index=2}
-          </p>
         </div>
       </div>
-    </section>
+    </div>
 
-    <section class="section" id="impact">
-      <div class="section-title">
-        <h2>Expected Operational Impact</h2>
-        <p>Measurable improvement targets</p>
+    <div class="divider"></div>
+
+    <!-- ARCHITECTURE -->
+    <div class="section" id="architecture">
+      <div class="section-label">Design</div>
+      <h2 class="section-title">Solution Architecture</h2>
+      <p class="section-sub">3-layer model: Input → Storage → Visualization</p>
+
+      <div class="three-col">
+        <div class="card reveal">
+          <div class="arch-number">01</div>
+          <h3>Data Input</h3>
+          <p style="font-size:0.88rem; color:var(--muted); margin-bottom:1rem;">
+            Standardized shift-level Excel templates for operators — covering production output,
+            downtime events, reason codes, and operator comments.
+          </p>
+          <div class="card-tags">
+            <span class="ctag">Validation lists</span>
+            <span class="ctag">Reason codes</span>
+            <span class="ctag">Shift templates</span>
+          </div>
+        </div>
+
+        <div class="card reveal">
+          <div class="arch-number">02</div>
+          <h3>Storage</h3>
+          <p style="font-size:0.88rem; color:var(--muted); margin-bottom:1rem;">
+            Central file storage via SharePoint / OneDrive / network share — maintaining
+            one single source of truth with controlled access roles.
+          </p>
+          <div class="card-tags">
+            <span class="ctag">Version control</span>
+            <span class="ctag">Access roles</span>
+            <span class="ctag">SharePoint-ready</span>
+          </div>
+        </div>
+
+        <div class="card reveal">
+          <div class="arch-number">03</div>
+          <h3>Analytics</h3>
+          <p style="font-size:0.88rem; color:var(--muted); margin-bottom:1rem;">
+            Power BI model with scheduled refresh and interactive dashboards
+            tailored for different operational roles — from operator to management.
+          </p>
+          <div class="card-tags">
+            <span class="ctag">Power Query</span>
+            <span class="ctag">DAX measures</span>
+            <span class="ctag">Role-based views</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- KPIs -->
+    <div class="section" id="kpis">
+      <div class="section-label">Metrics</div>
+      <h2 class="section-title">KPI Framework</h2>
+      <p class="section-sub">Operational visibility and maintenance readiness — defined targets per KPI.</p>
+
+      <div class="kpi-row reveal">
+        <div class="kpi-item">
+          <div class="kpi-val">OEE</div>
+          <div class="kpi-label">Overall Equipment Effectiveness</div>
+          <div class="kpi-target">Target ≥ 85%</div>
+        </div>
+        <div class="kpi-item">
+          <div class="kpi-val">MTBF</div>
+          <div class="kpi-label">Mean Time Between Failures</div>
+          <div class="kpi-target">Target ≥ 200 hrs</div>
+        </div>
+        <div class="kpi-item">
+          <div class="kpi-val">MTTR</div>
+          <div class="kpi-label">Mean Time To Repair</div>
+          <div class="kpi-target">Target ≤ 2 hrs</div>
+        </div>
+        <div class="kpi-item">
+          <div class="kpi-val">DT%</div>
+          <div class="kpi-label">Downtime Share</div>
+          <div class="kpi-target">Target ≤ 5%</div>
+        </div>
       </div>
 
-      <div class="grid">
-        <div class="card card-pad col-8">
-          <h3>Targets (12 months after full rollout)</h3>
+      <div class="two-col">
+        <div class="card reveal">
+          <h3>📊 Core KPI Logic</h3>
           <ul class="list">
-            <li>Reduce unplanned downtime by ~25–35%</li>
-            <li>Increase OEE to at least 85% for packaging operations</li>
+            <li>OEE = Availability × Performance × Quality — calculated as a DAX measure</li>
+            <li>MTBF and MTTR derived from timestamped downtime records</li>
+            <li>Downtime share tracked at shift, daily, and weekly level</li>
+            <li>All KPI targets defined at project start for consistent benchmarking</li>
+          </ul>
+        </div>
+
+        <div class="card blue reveal">
+          <h3>🔍 Failure Analysis & RCA</h3>
+          <ul class="list">
+            <li>3-level downtime categorization: type → category → specific fault</li>
+            <li>Pareto (80/20) logic to surface top drivers of lost time</li>
+            <li>RCA workflow: 5 Why + Ishikawa diagram + action plan + follow-up reminders</li>
+            <li>Structured learning loop to prevent repeat failures</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- IMPACT -->
+    <div class="section" id="impact">
+      <div class="section-label">Results</div>
+      <h2 class="section-title">Expected Operational Impact</h2>
+      <p class="section-sub">Measurable improvement targets — 12 months post full rollout.</p>
+
+      <div class="impact-grid">
+        <div class="card reveal">
+          <h3>📈 12-Month Targets</h3>
+          <ul class="list" style="margin-top:0.5rem;">
+            <li>Reduce unplanned downtime by 25–35% through structured fault coding and follow-up</li>
+            <li>Increase OEE to at least 85% in packaging operations</li>
             <li>Reduce MTTR by ~20% through better fault descriptions and faster diagnosis</li>
-            <li>Increase data quality: ≥ 80% correct fault coding</li>
+            <li>Achieve ≥ 80% correct fault coding rate for data quality</li>
           </ul>
-          <p class="small" style="margin-top:10px;">
-            These targets are defined as part of the project’s expected results & ROI. :contentReference[oaicite:3]{index=3}
-          </p>
         </div>
 
-        <div class="card card-pad col-4">
-          <div class="badge">ROI note</div>
-          <p class="small" style="margin-top:10px;">
-            Investment payback is estimated within ~6–10 months after go-live, primarily through reduced downtime costs
-            and improved production efficiency. :contentReference[oaicite:4]{index=4}
-          </p>
-          <hr class="hr" />
-          <a class="btn primary" href="index.html">🏠 Back to portfolio</a>
+        <div class="roi-card reveal">
+          <div class="roi-label">ROI Estimate</div>
+          <div class="roi-val">6–10<br><span style="font-size:1rem; color:var(--muted);">months</span></div>
+          <div class="roi-desc">
+            Estimated investment payback after go-live — primarily driven by reduced downtime costs
+            and improved production efficiency.
+          </div>
         </div>
       </div>
-    </section>
 
-    <footer class="footer">
-      <div>© <span id="year"></span> Petar Dojčinović — Project 01 (Anonymized)</div>
+      <a href="index.html" class="btn-back">← Back to Portfolio</a>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+      <span>© Petar Dojčinović — Project 01 (Anonymized)</span>
+      <span style="color: var(--orange);">Operations & Process Development</span>
     </footer>
-  </main>
 
-  <script src="assets/app.js"></script>
+  </div><!-- /container -->
+
+  <script>
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) {
+          setTimeout(() => e.target.classList.add('visible'), i * 80);
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    reveals.forEach(el => observer.observe(el));
+  </script>
+
 </body>
 </html>
