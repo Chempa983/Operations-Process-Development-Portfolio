@@ -1,260 +1,694 @@
-<!-- pesisttema.html (UPGRADED • ENGLISH) -->
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>PESISTTEMA — Public Safety Digital Platform</title>
-  <meta name="description" content="PESISTTEMA concept overview: a municipal safety platform integrating citizen reporting, emergency logic, and institutional coordination." />
-  <link rel="stylesheet" href="assets/styles.css" />
+  <meta name="description" content="PESISTTEMA concept: a municipal safety platform integrating citizen reporting, emergency logic, and institutional coordination."/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #0a0c10;
+      --surface: #111318;
+      --surface2: #181c24;
+      --border: rgba(255,255,255,0.07);
+      --blue: #2f7fff;
+      --blue-light: #5a9fff;
+      --orange: #ff6b2b;
+      --orange-light: #ff9a6c;
+      --text: #e8eaf0;
+      --muted: #6b7280;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 0;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.2rem 4rem;
+      background: rgba(10,12,16,0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-back {
+      display: flex; align-items: center; gap: 0.6rem;
+      text-decoration: none; color: var(--muted);
+      font-size: 0.85rem; letter-spacing: 0.05em;
+      transition: color 0.2s;
+    }
+    .nav-back:hover { color: var(--text); }
+    .nav-badge {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      padding: 0.3rem 0.8rem;
+      background: rgba(47,127,255,0.1);
+      border: 1px solid rgba(47,127,255,0.25);
+      color: var(--blue-light);
+      border-radius: 2rem;
+    }
+    .nav-links-inner { display: flex; gap: 2rem; list-style: none; }
+    .nav-links-inner a {
+      color: var(--muted); text-decoration: none;
+      font-size: 0.82rem; letter-spacing: 0.08em;
+      text-transform: uppercase; transition: color 0.2s;
+    }
+    .nav-links-inner a:hover { color: var(--text); }
+
+    /* LAYOUT */
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 4rem; }
+
+    /* HERO */
+    .hero {
+      padding: 9rem 0 5rem;
+      position: relative; overflow: hidden;
+    }
+    .hero::after {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(47,127,255,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(47,127,255,0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+    }
+    .hero-inner { position: relative; z-index: 1; }
+    .hero-top { display: grid; grid-template-columns: 1fr auto; gap: 2rem; align-items: start; }
+
+    .project-eyebrow {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: rgba(47,127,255,0.08);
+      border: 1px solid rgba(47,127,255,0.2);
+      border-radius: 2rem;
+      padding: 0.4rem 1rem;
+      font-size: 0.75rem; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--blue-light);
+      margin-bottom: 1.5rem;
+      animation: fadeUp 0.6s ease both;
+    }
+
+    .hero h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 800; line-height: 1.0;
+      letter-spacing: -0.02em; margin-bottom: 0.5rem;
+      animation: fadeUp 0.6s 0.1s ease both;
+    }
+    .hero h1 .accent { color: var(--blue); }
+
+    .hero-full-name {
+      font-size: 0.8rem; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--muted);
+      margin-bottom: 1.2rem;
+      animation: fadeUp 0.6s 0.15s ease both;
+    }
+
+    .hero-desc {
+      font-size: 1.05rem; color: var(--muted);
+      max-width: 680px; margin-bottom: 2rem;
+      animation: fadeUp 0.6s 0.2s ease both;
+    }
+
+    .pills { display: flex; flex-wrap: wrap; gap: 0.6rem; animation: fadeUp 0.6s 0.3s ease both; }
+    .pill {
+      padding: 0.35rem 0.9rem;
+      border: 1px solid var(--border);
+      border-radius: 0.3rem;
+      font-size: 0.78rem; letter-spacing: 0.05em;
+      color: var(--muted); background: var(--surface);
+    }
+
+    /* META CARD */
+    .meta-card {
+      background: var(--surface);
+      border: 1px solid rgba(47,127,255,0.2);
+      border-radius: 0.8rem;
+      padding: 1.5rem;
+      min-width: 220px;
+      animation: fadeUp 0.6s 0.35s ease both;
+    }
+    .meta-card::before {
+      content: '';
+      display: block; height: 2px;
+      background: linear-gradient(90deg, var(--blue), transparent);
+      margin-bottom: 1.2rem;
+      border-radius: 2px;
+    }
+    .meta-row {
+      display: flex; flex-direction: column; gap: 0.7rem;
+      margin-bottom: 1.2rem;
+    }
+    .meta-item { font-size: 0.82rem; }
+    .meta-item strong { color: var(--blue-light); display: block; font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.1rem; }
+    .meta-item span { color: var(--muted); }
+
+    /* DIVIDER */
+    .divider { height: 1px; background: linear-gradient(90deg, transparent, var(--border), transparent); }
+
+    /* SECTIONS */
+    .section { padding: 5rem 0; }
+    .section-label {
+      display: flex; align-items: center; gap: 1rem;
+      font-size: 0.72rem; letter-spacing: 0.15em;
+      text-transform: uppercase; color: var(--blue);
+      margin-bottom: 0.7rem;
+    }
+    .section-label::after {
+      content: ''; flex: 1; max-width: 60px;
+      height: 1px; background: var(--blue); opacity: 0.5;
+    }
+    .section-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(1.5rem, 3vw, 2.2rem);
+      font-weight: 800; line-height: 1.1; margin-bottom: 0.5rem;
+    }
+    .section-sub { color: var(--muted); font-size: 0.95rem; margin-bottom: 2.5rem; }
+
+    /* CARDS */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 0.8rem; padding: 2rem;
+      position: relative; overflow: hidden;
+      transition: border-color 0.25s;
+    }
+    .card:hover { border-color: rgba(47,127,255,0.2); }
+    .card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--blue), transparent);
+    }
+    .card.orange::before { background: linear-gradient(90deg, var(--orange), transparent); }
+    .card.orange:hover { border-color: rgba(255,107,43,0.2); }
+
+    .card h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1rem; font-weight: 700;
+      margin-bottom: 1rem; color: var(--text);
+    }
+
+    .list { list-style: none; display: flex; flex-direction: column; gap: 0.55rem; }
+    .list li {
+      font-size: 0.88rem; color: var(--muted);
+      display: flex; align-items: flex-start; gap: 0.7rem; line-height: 1.5;
+    }
+    .list li::before {
+      content: '▸'; color: var(--blue);
+      font-size: 0.7rem; flex-shrink: 0; margin-top: 0.25rem;
+    }
+    .card.orange .list li::before { color: var(--orange); }
+
+    .card-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.2rem; }
+    .ctag {
+      font-size: 0.72rem; padding: 0.2rem 0.6rem;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 0.25rem; color: var(--muted); letter-spacing: 0.05em;
+    }
+
+    /* GRIDS */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    .four-col { display: grid; grid-template-columns: repeat(4,1fr); gap: 1.5rem; }
+
+    /* MODULES arch number */
+    .arch-number {
+      font-family: 'Syne', sans-serif;
+      font-size: 2.5rem; font-weight: 800;
+      color: var(--surface2); line-height: 1; margin-bottom: 0.8rem;
+      transition: color 0.3s;
+    }
+    .card:hover .arch-number { color: rgba(47,127,255,0.18); }
+
+    /* WORKFLOW STEPS */
+    .workflow {
+      display: flex; flex-direction: column; gap: 0;
+      counter-reset: steps;
+    }
+    .workflow-step {
+      display: flex; gap: 1.5rem; align-items: flex-start;
+      padding: 1.2rem 0;
+      border-bottom: 1px solid var(--border);
+      counter-increment: steps;
+    }
+    .workflow-step:last-child { border-bottom: none; }
+    .step-num {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.7rem; font-weight: 800;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--blue-light);
+      background: rgba(47,127,255,0.1);
+      border: 1px solid rgba(47,127,255,0.2);
+      border-radius: 0.25rem;
+      padding: 0.25rem 0.6rem;
+      white-space: nowrap; flex-shrink: 0;
+      margin-top: 0.15rem;
+    }
+    .step-content { font-size: 0.9rem; color: var(--muted); line-height: 1.5; }
+    .step-content strong { color: var(--text); font-weight: 500; }
+
+    /* KPI METRICS */
+    .kpi-row {
+      display: grid; grid-template-columns: repeat(4,1fr);
+      gap: 1px; background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 0.8rem; overflow: hidden; margin-bottom: 1.5rem;
+    }
+    .kpi-item {
+      background: var(--surface); padding: 1.5rem; text-align: center;
+      transition: background 0.2s;
+    }
+    .kpi-item:hover { background: var(--surface2); }
+    .kpi-val {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.3rem; font-weight: 800;
+      color: var(--blue-light); line-height: 1; margin-bottom: 0.4rem;
+    }
+    .kpi-label { font-size: 0.73rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.07em; }
+
+    /* PHASES */
+    .phases { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+
+    /* QUOTE */
+    .quote-block {
+      margin-top: 2rem;
+      padding: 1.5rem 2rem;
+      border-left: 3px solid var(--blue);
+      background: rgba(47,127,255,0.04);
+      border-radius: 0 0.5rem 0.5rem 0;
+      font-style: italic; font-size: 1rem; color: var(--muted);
+    }
+
+    /* BACK BUTTON */
+    .btn-back {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      padding: 0.85rem 2rem;
+      background: transparent; color: var(--text);
+      border: 1px solid var(--border); border-radius: 0.4rem;
+      font-family: 'Syne', sans-serif; font-weight: 600;
+      font-size: 0.85rem; letter-spacing: 0.06em;
+      text-transform: uppercase; text-decoration: none;
+      transition: border-color 0.2s, color 0.2s; margin-top: 2rem;
+    }
+    .btn-back:hover { border-color: var(--orange); color: var(--orange-light); }
+
+    .btn-contact {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      padding: 0.85rem 2rem;
+      background: var(--orange); color: #fff;
+      border: none; border-radius: 0.4rem;
+      font-family: 'Syne', sans-serif; font-weight: 700;
+      font-size: 0.85rem; letter-spacing: 0.06em;
+      text-transform: uppercase; text-decoration: none;
+      transition: background 0.2s; margin-top: 1.5rem;
+    }
+    .btn-contact:hover { background: var(--orange-light); }
+
+    /* FOOTER */
+    footer {
+      padding: 1.5rem 0; border-top: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 0.78rem; color: var(--muted); margin-top: 2rem;
+    }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .reveal {
+      opacity: 0; transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links-inner { display: none; }
+      .container { padding: 0 1.5rem; }
+      .hero { padding: 7rem 0 3rem; }
+      .hero-top { grid-template-columns: 1fr; }
+      .meta-card { display: none; }
+      .two-col, .phases, .four-col { grid-template-columns: 1fr; }
+      .kpi-row { grid-template-columns: 1fr 1fr; }
+      footer { flex-direction: column; gap: 0.5rem; }
+    }
+  </style>
 </head>
-
 <body>
-<header class="nav">
-  <div class="container nav-inner">
-    <div class="brand">
-      <a href="index.html" style="text-decoration:none;color:inherit;">
-        <span>Petar Dojčinović</span>
-        <span class="badge">Operations Portfolio</span>
-      </a>
+
+  <!-- NAV -->
+  <nav>
+    <a href="index.html" class="nav-back">← Portfolio</a>
+    <span class="nav-badge">Concept 01 · Urban Safety</span>
+    <ul class="nav-links-inner">
+      <li><a href="#modules">Modules</a></li>
+      <li><a href="#workflow">Workflow</a></li>
+      <li><a href="#kpis">KPIs</a></li>
+      <li><a href="#phases">Phases</a></li>
+    </ul>
+  </nav>
+
+  <div class="container">
+
+    <!-- HERO -->
+    <div class="hero">
+      <div class="hero-inner">
+        <div class="hero-top">
+          <div>
+            <div class="project-eyebrow">🧭 Strategic Concept · Urban & Public Safety</div>
+            <h1>PESISTTEMA<span class="accent">.</span></h1>
+            <p class="hero-full-name">Public Emergency Safety Information System Through Technology</p>
+            <p class="hero-desc">
+              A unified municipal safety platform connecting citizens, municipalities, and emergency stakeholders
+              through structured reporting, verified workflows, and an operational dashboard for
+              prioritization, ownership, and measurable follow-up.
+            </p>
+            <div class="pills">
+              <span class="pill">🧭 Public-sector operations</span>
+              <span class="pill">🧠 Systems thinking</span>
+              <span class="pill">🧯 Emergency logic</span>
+              <span class="pill">📊 Analytics & transparency</span>
+            </div>
+          </div>
+          <div class="meta-card">
+            <div class="meta-row">
+              <div class="meta-item"><strong>Type</strong><span>Strategic concept</span></div>
+              <div class="meta-item"><strong>Focus</strong><span>Safety + operations</span></div>
+              <div class="meta-item"><strong>Role</strong><span>Concept owner / system design</span></div>
+              <div class="meta-item"><strong>Outputs</strong><span>Modules, workflows, dashboard logic</span></div>
+              <div class="meta-item"><strong>Audience</strong><span>Municipalities & public partners</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <nav class="nav-links">
-      <a href="index.html#concepts">Back</a>
-      <a href="index.html#contact">Contact</a>
-    </nav>
+
+    <div class="divider"></div>
+
+    <!-- PROBLEM -->
+    <div class="section">
+      <div class="section-label">Context</div>
+      <h2 class="section-title">Problem Context</h2>
+      <p class="section-sub">Why this platform needs to exist.</p>
+
+      <div class="two-col">
+        <div class="card reveal">
+          <h3>🔴 The Problem</h3>
+          <ul class="list">
+            <li>Citizens often don't know where or how to report issues — non-emergency, semi-urgent, or urgent</li>
+            <li>Reports are fragmented across channels, leading to slower response and weak traceability</li>
+            <li>Municipal follow-up is hard to measure without standardized intake and categorization</li>
+            <li>Trust erodes when citizens receive no feedback or timeline after reporting</li>
+          </ul>
+        </div>
+        <div class="card orange reveal">
+          <h3>🎯 The Solution Goal</h3>
+          <ul class="list">
+            <li>Faster intake with clear ownership and accountability at every step</li>
+            <li>Standardized categorization enabling consistent prioritization</li>
+            <li>Transparent status tracking that keeps citizens informed throughout</li>
+            <li>Data-driven prevention: identify patterns before they become incidents</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- MODULES -->
+    <div class="section" id="modules">
+      <div class="section-label">Platform Design</div>
+      <h2 class="section-title">Core Modules</h2>
+      <p class="section-sub">How the platform is structured — four interconnected layers.</p>
+
+      <div class="two-col">
+        <div class="card reveal">
+          <div class="arch-number">01</div>
+          <h3>Citizen App</h3>
+          <ul class="list">
+            <li>Incident reporting with geo-location + photo/video evidence</li>
+            <li>Category selection: traffic, lighting, crime risk, vandalism, hazards, noise</li>
+            <li>Severity guidance — non-urgent vs urgent vs emergency</li>
+            <li>Status tracking: received → assigned → in progress → resolved</li>
+            <li>Location-based local alerts and community updates</li>
+          </ul>
+          <div class="card-tags">
+            <span class="ctag">Mobile-first</span>
+            <span class="ctag">Geo-location</span>
+            <span class="ctag">Evidence upload</span>
+          </div>
+        </div>
+
+        <div class="card reveal">
+          <div class="arch-number">02</div>
+          <h3>Municipal Operations Dashboard</h3>
+          <ul class="list">
+            <li>Standardized intake queue with priority rules and SLA timers</li>
+            <li>Assignment workflows — ownership + deadline tracking</li>
+            <li>Evidence review, validation flags, and internal notes</li>
+            <li>Citizen-facing status updates pushed automatically</li>
+            <li>Case closure logic + audit-ready reporting</li>
+          </ul>
+          <div class="card-tags">
+            <span class="ctag">SLA tracking</span>
+            <span class="ctag">Assignment logic</span>
+            <span class="ctag">Audit trail</span>
+          </div>
+        </div>
+
+        <div class="card reveal">
+          <div class="arch-number">03</div>
+          <h3>Emergency Logic Layer</h3>
+          <ul class="list">
+            <li>SOS button with automatic location sharing to emergency contacts</li>
+            <li>Escalation triggers based on severity level and keyword detection</li>
+            <li>Basic triage guidance — what to do now vs wait for response</li>
+            <li>Integration-ready structure for emergency service stakeholders</li>
+          </ul>
+          <div class="card-tags">
+            <span class="ctag">SOS escalation</span>
+            <span class="ctag">Auto-location</span>
+            <span class="ctag">Triage guidance</span>
+          </div>
+        </div>
+
+        <div class="card reveal">
+          <div class="arch-number">04</div>
+          <h3>Analytics & Transparency</h3>
+          <ul class="list">
+            <li>Heatmaps and trend analysis by time, location, and category</li>
+            <li>Response time analysis and SLA compliance tracking</li>
+            <li>Recurring risk pattern detection and hotspot identification</li>
+            <li>Public transparency summaries — aggregated and anonymized</li>
+          </ul>
+          <div class="card-tags">
+            <span class="ctag">Heatmaps</span>
+            <span class="ctag">SLA analysis</span>
+            <span class="ctag">Public reporting</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- WORKFLOW -->
+    <div class="section" id="workflow">
+      <div class="section-label">Process</div>
+      <h2 class="section-title">Operational Workflow</h2>
+      <p class="section-sub">From citizen report to full resolution — every step traceable.</p>
+
+      <div class="card reveal">
+        <div class="workflow">
+          <div class="workflow-step">
+            <span class="step-num">Step 01</span>
+            <div class="step-content"><strong>Citizen submits report</strong> — category, severity, evidence, and geo-location captured at intake</div>
+          </div>
+          <div class="workflow-step">
+            <span class="step-num">Step 02</span>
+            <div class="step-content"><strong>System validates</strong> — duplicate detection, incomplete field checks, and basic rule filtering</div>
+          </div>
+          <div class="workflow-step">
+            <span class="step-num">Step 03</span>
+            <div class="step-content"><strong>Queue prioritization</strong> — ranked by severity, risk type, and proximity to sensitive zones</div>
+          </div>
+          <div class="workflow-step">
+            <span class="step-num">Step 04</span>
+            <div class="step-content"><strong>Assignment</strong> — department or partner ownership confirmed, SLA timer starts</div>
+          </div>
+          <div class="workflow-step">
+            <span class="step-num">Step 05</span>
+            <div class="step-content"><strong>Execution & follow-up</strong> — status updates pushed to citizen, internal notes logged throughout</div>
+          </div>
+          <div class="workflow-step">
+            <span class="step-num">Step 06</span>
+            <div class="step-content"><strong>Closure</strong> — resolution code applied, root-cause tagged, prevention suggestion recorded</div>
+          </div>
+          <div class="workflow-step">
+            <span class="step-num">Step 07</span>
+            <div class="step-content"><strong>Analytics</strong> — case feeds KPI reporting and governance trend analysis automatically</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- KPIs -->
+    <div class="section" id="kpis">
+      <div class="section-label">Measurement</div>
+      <h2 class="section-title">Value & KPIs</h2>
+      <p class="section-sub">How impact is measured — operationally and at community level.</p>
+
+      <div class="kpi-row reveal">
+        <div class="kpi-item">
+          <div class="kpi-val">Time-to-Triage</div>
+          <div class="kpi-label">Average intake response speed</div>
+        </div>
+        <div class="kpi-item">
+          <div class="kpi-val">SLA Rate</div>
+          <div class="kpi-label">Cases resolved within target time</div>
+        </div>
+        <div class="kpi-item">
+          <div class="kpi-val">Re-open Rate</div>
+          <div class="kpi-label">Quality indicator per case type</div>
+        </div>
+        <div class="kpi-item">
+          <div class="kpi-val">CSAT</div>
+          <div class="kpi-label">Citizen satisfaction after closure</div>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div class="card reveal">
+          <h3>⚙️ Operational KPIs</h3>
+          <ul class="list">
+            <li>Average time-to-triage from submission</li>
+            <li>Average time-to-assign ownership after triage</li>
+            <li>SLA compliance rate broken down by category</li>
+            <li>Re-open rate as a quality and resolution completeness indicator</li>
+            <li>Duplicate rate for signal-to-noise control</li>
+          </ul>
+        </div>
+        <div class="card orange reveal">
+          <h3>🏙️ Community KPIs</h3>
+          <ul class="list">
+            <li>Citizen satisfaction score after each case closure</li>
+            <li>Transparency rate — cases with regular status updates</li>
+            <li>Reduction in recurring incidents by identified hotspot</li>
+            <li>Growth in early reporting — indicator of preventive platform effect</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ARCHITECTURE -->
+    <div class="section">
+      <div class="section-label">Technical Overview</div>
+      <h2 class="section-title">Architecture (High-Level)</h2>
+      <p class="section-sub">Structured for scale — from pilot to multi-city deployment.</p>
+
+      <div class="card reveal">
+        <div class="two-col" style="gap:2rem;">
+          <ul class="list">
+            <li><strong style="color:var(--text);">Front-end</strong> — Citizen app + web-based municipal portal</li>
+            <li><strong style="color:var(--text);">Back-end services</strong> — Authentication, case management, notification engine</li>
+            <li><strong style="color:var(--text);">Data model</strong> — Case entity + evidence + geo + status history + SLA clock</li>
+          </ul>
+          <ul class="list">
+            <li><strong style="color:var(--text);">Integrations</strong> — Municipality ticketing systems, emergency partner endpoints</li>
+            <li><strong style="color:var(--text);">Security</strong> — Role-based access, evidence integrity, anonymized public outputs</li>
+            <li><strong style="color:var(--text);">Scalability</strong> — Multi-city configuration via templates and governance model</li>
+          </ul>
+        </div>
+        <p style="font-size:0.8rem; color:var(--muted); margin-top:1.5rem; font-style:italic;">
+          Implementation details are kept intentionally high-level where confidentiality applies.
+        </p>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- PHASES -->
+    <div class="section" id="phases">
+      <div class="section-label">Roadmap</div>
+      <h2 class="section-title">Next Steps</h2>
+      <p class="section-sub">What I would execute first — from pilot to scale.</p>
+
+      <div class="phases">
+        <div class="card reveal">
+          <div class="arch-number">01</div>
+          <h3>Phase 1 — Pilot (Single Municipality)</h3>
+          <ul class="list">
+            <li>Define categories, severities, and SLA targets with stakeholders</li>
+            <li>Build MVP: reporting, dashboard, and automated status updates</li>
+            <li>Run controlled pilot with selected user group</li>
+            <li>Measure KPI baseline and iterate on feedback</li>
+          </ul>
+        </div>
+        <div class="card reveal">
+          <div class="arch-number">02</div>
+          <h3>Phase 2 — Scale</h3>
+          <ul class="list">
+            <li>Integrate with existing municipal workflows and ticketing systems</li>
+            <li>Expand analytics and public transparency reporting layer</li>
+            <li>Multi-city configuration through templates and governance</li>
+            <li>Build partner ecosystem: security, emergency services, infrastructure</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="quote-block">
+        "PESISTTEMA makes safety operations measurable: standard intake, clear ownership, traceable follow-up, and data-driven prevention."
+      </div>
+
+      <div style="display:flex; gap:1rem; flex-wrap:wrap;">
+        <a href="index.html" class="btn-back">← Back to Portfolio</a>
+        <a href="index.html#contact" class="btn-contact">Get in Touch →</a>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+      <span>© Petar Dojčinović — PESISTTEMA Concept</span>
+      <span style="color: var(--blue-light);">Operations & Process Development</span>
+    </footer>
+
   </div>
-</header>
 
-<main class="container">
+  <script>
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) {
+          setTimeout(() => e.target.classList.add('visible'), i * 80);
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    reveals.forEach(el => observer.observe(el));
+  </script>
 
-  <!-- HERO / SUMMARY -->
-  <section class="section">
-    <div class="section-title">
-      <h2>PESISTTEMA</h2>
-      <p>Public Emergency Safety Information System Through Technology</p>
-    </div>
-
-    <div class="grid">
-      <div class="card card-pad col-8">
-        <h3>What I built (concept)</h3>
-        <p>
-          I designed PESISTTEMA as a unified municipal safety platform that connects citizens,
-          municipalities, and emergency stakeholders through structured reporting, verified workflows,
-          and an operational dashboard for prioritization and follow-up.
-        </p>
-
-        <div class="kpis" style="margin-top:12px;">
-          <span class="pill">🧭 Public-sector operations</span>
-          <span class="pill">🧠 System thinking</span>
-          <span class="pill">🧯 Emergency logic</span>
-          <span class="pill">📊 Analytics & transparency</span>
-        </div>
-
-        <hr class="hr" />
-
-        <h3>Problem context</h3>
-        <ul class="list">
-          <li>Citizens often don’t know where or how to report issues (non-emergency, semi-urgent, urgent).</li>
-          <li>Reports are fragmented across channels, leading to slower response and weak traceability.</li>
-          <li>Municipal follow-up is hard to measure without a standardized intake and categorization model.</li>
-          <li>Trust decreases when citizens receive no feedback or timeline after reporting.</li>
-        </ul>
-      </div>
-
-      <div class="card card-pad col-4">
-        <div class="badge">Project meta</div>
-
-        <div class="small" style="margin-top:10px;">
-          <div><strong>Type:</strong> Strategic concept</div>
-          <div><strong>Focus:</strong> Safety + operations</div>
-          <div><strong>My role:</strong> Concept owner / system design</div>
-          <div><strong>Outputs:</strong> Modules, workflows, dashboard logic</div>
-        </div>
-
-        <hr class="hr" />
-
-        <div class="small">
-          <div><strong>Audience:</strong> Municipalities & public partners</div>
-          <div><strong>Goal:</strong> Faster intake → clearer ownership → measurable follow-up</div>
-        </div>
-
-        <div style="margin-top:14px;">
-          <a class="btn" href="index.html">← Back to Home</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- CORE MODULES -->
-  <section class="section">
-    <div class="section-title">
-      <h2>Core modules</h2>
-      <p>How the platform is structured</p>
-    </div>
-
-    <div class="grid">
-      <div class="card card-pad col-6">
-        <h3>1) Citizen app</h3>
-        <ul class="list">
-          <li>Incident reporting with geo-location + photo/video evidence</li>
-          <li>Category selection (traffic, lighting, crime risk, vandalism, hazards, noise, etc.)</li>
-          <li>Severity level guidance (non-urgent vs urgent vs emergency)</li>
-          <li>Status tracking (received → assigned → in progress → resolved)</li>
-          <li>Local alerts and community updates (location-based)</li>
-        </ul>
-      </div>
-
-      <div class="card card-pad col-6">
-        <h3>2) Municipal operations dashboard</h3>
-        <ul class="list">
-          <li>Standardized intake queue with prioritization rules</li>
-          <li>Assignment workflows (ownership + SLA targets)</li>
-          <li>Evidence review & validation flags</li>
-          <li>Internal notes + citizen-facing updates</li>
-          <li>Case closure logic + reporting for audits</li>
-        </ul>
-      </div>
-
-      <div class="card card-pad col-6">
-        <h3>3) Emergency logic layer</h3>
-        <ul class="list">
-          <li>SOS button with automatic location sharing</li>
-          <li>Escalation triggers based on severity and keywords</li>
-          <li>Basic triage guidance (what to do now)</li>
-          <li>Integration-ready structure for emergency stakeholders</li>
-        </ul>
-      </div>
-
-      <div class="card card-pad col-6">
-        <h3>4) Analytics & transparency</h3>
-        <ul class="list">
-          <li>Heatmaps and trends (time, location, category)</li>
-          <li>Response time analysis (SLA compliance)</li>
-          <li>Recurring risk patterns and “hot spot” detection</li>
-          <li>Public transparency summaries (aggregated / anonymized)</li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <!-- WORKFLOWS -->
-  <section class="section">
-    <div class="section-title">
-      <h2>Operational workflow</h2>
-      <p>From report to resolution (traceable)</p>
-    </div>
-
-    <div class="grid">
-      <div class="card card-pad col-12">
-        <ol class="list">
-          <li><strong>Citizen submits report</strong> (category + severity + evidence + location)</li>
-          <li><strong>System validates</strong> (duplicate detection, incomplete fields, basic rules)</li>
-          <li><strong>Queue prioritization</strong> (severity, risk type, proximity to sensitive zones)</li>
-          <li><strong>Assignment</strong> (department / partner owner + SLA timer)</li>
-          <li><strong>Execution & follow-up</strong> (updates pushed to citizen, internal notes logged)</li>
-          <li><strong>Closure</strong> (resolution code, root-cause tag, prevention suggestion)</li>
-          <li><strong>Analytics</strong> (trend and KPI reporting for governance)</li>
-        </ol>
-      </div>
-    </div>
-  </section>
-
-  <!-- KPI & VALUE -->
-  <section class="section">
-    <div class="section-title">
-      <h2>Value & KPIs</h2>
-      <p>How impact can be measured</p>
-    </div>
-
-    <div class="grid">
-      <div class="card card-pad col-6">
-        <h3>Operational KPIs</h3>
-        <ul class="list">
-          <li>Average time-to-triage</li>
-          <li>Average time-to-assign ownership</li>
-          <li>SLA compliance by category</li>
-          <li>Re-open rate (quality indicator)</li>
-          <li>Duplicate rate (signal-to-noise control)</li>
-        </ul>
-      </div>
-
-      <div class="card card-pad col-6">
-        <h3>Community KPIs</h3>
-        <ul class="list">
-          <li>Citizen satisfaction after closure (simple rating)</li>
-          <li>Transparency rate (cases with regular status updates)</li>
-          <li>Reduction in recurring incidents by hotspot</li>
-          <li>Increase in “early reporting” (preventive effect)</li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <!-- ARCHITECTURE (HIGH LEVEL) -->
-  <section class="section">
-    <div class="section-title">
-      <h2>Architecture (high-level)</h2>
-      <p>How I would structure the system for scale</p>
-    </div>
-
-    <div class="grid">
-      <div class="card card-pad col-12">
-        <ul class="list">
-          <li><strong>Front-end:</strong> Citizen app + web portal</li>
-          <li><strong>Back-end services:</strong> Authentication, case management, notification service</li>
-          <li><strong>Data model:</strong> Case entity + evidence + geo + status history + SLA clock</li>
-          <li><strong>Integrations:</strong> Municipality ticketing, emergency partner endpoints (future)</li>
-          <li><strong>Security:</strong> Role-based access, evidence integrity, anonymized public outputs</li>
-        </ul>
-        <p class="small" style="margin-top:10px;">
-          I keep this page intentionally non-technical where confidentiality and implementation details apply.
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <!-- NEXT STEPS -->
-  <section class="section">
-    <div class="section-title">
-      <h2>Next steps</h2>
-      <p>What I would execute first</p>
-    </div>
-
-    <div class="grid">
-      <div class="card card-pad col-6">
-        <h3>Phase 1 — Pilot (single municipality)</h3>
-        <ul class="list">
-          <li>Define categories, severities, and SLA targets</li>
-          <li>Build MVP reporting + dashboard + status updates</li>
-          <li>Run controlled pilot with selected user group</li>
-          <li>Measure KPI baseline and iterate</li>
-        </ul>
-      </div>
-
-      <div class="card card-pad col-6">
-        <h3>Phase 2 — Scale</h3>
-        <ul class="list">
-          <li>Integrations with existing municipal workflows</li>
-          <li>Analytics and transparency layer expansion</li>
-          <li>Multi-city configuration (templates + governance)</li>
-          <li>Partner ecosystem (security, emergency, infrastructure)</li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="card card-pad" style="margin-top:14px;">
-      <blockquote>
-        I designed PESISTTEMA to make safety operations measurable: standard intake, clear ownership,
-        traceable follow-up, and data-driven prevention.
-      </blockquote>
-      <div style="margin-top:12px;">
-        <a class="btn" href="index.html#contact">Contact me →</a>
-      </div>
-    </div>
-  </section>
-
-</main>
-
-<script src="assets/app.js"></script>
 </body>
 </html>
