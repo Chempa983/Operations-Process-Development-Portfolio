@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Petar Dojčinović — Operations Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #0a0c10;
+      --surface: #111318;
+      --surface2: #181c24;
+      --border: rgba(255,255,255,0.07);
+      --blue: #2f7fff;
+      --blue-light: #5a9fff;
+      --orange: #ff6b2b;
+      --orange-light: #ff9a6c;
+      --text: #e8eaf0;
+      --muted: #6b7280;
+      --accent-glow-blue: rgba(47,127,255,0.15);
+      --accent-glow-orange: rgba(255,107,43,0.15);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ── NOISE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 0;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.2rem 4rem;
+      background: rgba(10,12,16,0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1rem;
+      letter-spacing: 0.05em;
+      color: var(--text);
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--orange); }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      padding: 8rem 4rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Background grid lines */
+    .hero::after {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(47,127,255,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(47,127,255,0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+    }
+
+    .hero-left { position: relative; z-index: 1; }
+
+    .hero-tag {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: rgba(47,127,255,0.08);
+      border: 1px solid rgba(47,127,255,0.2);
+      border-radius: 2rem;
+      padding: 0.4rem 1rem;
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--blue-light);
+      margin-bottom: 2rem;
+      animation: fadeUp 0.6s ease both;
+    }
+    .hero-tag::before {
+      content: '';
+      width: 6px; height: 6px;
+      background: var(--blue);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    .hero-name {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(3rem, 6vw, 5.5rem);
+      font-weight: 800;
+      line-height: 1.0;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.5rem;
+      animation: fadeUp 0.7s 0.1s ease both;
+    }
+    .hero-name .accent { color: var(--orange); }
+
+    .hero-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(1rem, 2vw, 1.4rem);
+      font-weight: 600;
+      color: var(--blue-light);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+      animation: fadeUp 0.7s 0.2s ease both;
+    }
+
+    .hero-desc {
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 480px;
+      margin-bottom: 2.5rem;
+      animation: fadeUp 0.7s 0.3s ease both;
+    }
+
+    .hero-tags {
+      display: flex; flex-wrap: wrap; gap: 0.6rem;
+      margin-bottom: 2.5rem;
+      animation: fadeUp 0.7s 0.4s ease both;
+    }
+    .tag {
+      padding: 0.35rem 0.9rem;
+      border: 1px solid var(--border);
+      border-radius: 0.3rem;
+      font-size: 0.78rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+      background: var(--surface);
+    }
+
+    .hero-cta {
+      display: flex; gap: 1rem;
+      animation: fadeUp 0.7s 0.5s ease both;
+    }
+    .btn-primary {
+      padding: 0.85rem 2rem;
+      background: var(--orange);
+      color: #fff;
+      border: none;
+      border-radius: 0.4rem;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 0.85rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .btn-primary:hover { background: var(--orange-light); transform: translateY(-1px); }
+    .btn-secondary {
+      padding: 0.85rem 2rem;
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 0.4rem;
+      font-family: 'Syne', sans-serif;
+      font-weight: 600;
+      font-size: 0.85rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      text-decoration: none;
+      cursor: pointer;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .btn-secondary:hover { border-color: var(--blue); color: var(--blue-light); }
+
+    /* Hero right - stats visual */
+    .hero-right {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 1;
+      animation: fadeIn 1s 0.4s ease both;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      overflow: hidden;
+      max-width: 400px;
+      width: 100%;
+    }
+    .stat-card {
+      background: var(--surface);
+      padding: 2rem 1.8rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .stat-card:hover { background: var(--surface2); }
+    .stat-icon { font-size: 1.5rem; margin-bottom: 0.3rem; }
+    .stat-val {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1;
+    }
+    .stat-val .unit { font-size: 1rem; color: var(--orange); }
+    .stat-label {
+      font-size: 0.78rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .stat-card.highlight { background: linear-gradient(135deg, rgba(47,127,255,0.12), rgba(47,127,255,0.04)); }
+    .stat-card.highlight .stat-val { color: var(--blue-light); }
+
+    /* ── SECTION BASE ── */
+    section { padding: 6rem 4rem; position: relative; }
+    .section-label {
+      display: flex; align-items: center; gap: 1rem;
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 1rem;
+    }
+    .section-label::after {
+      content: '';
+      flex: 1; max-width: 60px;
+      height: 1px;
+      background: var(--orange);
+      opacity: 0.5;
+    }
+    .section-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 3.5rem;
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin: 0 4rem;
+    }
+
+    /* ── PROJECT CARDS ── */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .project-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 0.8rem;
+      padding: 2rem;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+      transition: border-color 0.25s, transform 0.2s, box-shadow 0.25s;
+      position: relative;
+      overflow: hidden;
+    }
+    .project-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--blue), var(--orange));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.35s ease;
+    }
+    .project-card:hover {
+      border-color: rgba(47,127,255,0.3);
+      transform: translateY(-3px);
+      box-shadow: 0 16px 48px rgba(0,0,0,0.4), 0 0 0 1px rgba(47,127,255,0.1);
+    }
+    .project-card:hover::before { transform: scaleX(1); }
+
+    .project-card.industrial::before { background: linear-gradient(90deg, var(--orange), #ff9a6c); }
+    .project-card.industrial:hover { border-color: rgba(255,107,43,0.3); }
+
+    .card-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .card-num {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .card-type-badge {
+      font-size: 0.68rem;
+      padding: 0.25rem 0.7rem;
+      border-radius: 2rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+    .badge-industrial { background: rgba(255,107,43,0.12); color: var(--orange-light); border: 1px solid rgba(255,107,43,0.2); }
+    .badge-concept { background: rgba(47,127,255,0.1); color: var(--blue-light); border: 1px solid rgba(47,127,255,0.2); }
+
+    .card-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      line-height: 1.3;
+      color: var(--text);
+    }
+    .card-desc {
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+    .card-tags {
+      display: flex; flex-wrap: wrap; gap: 0.5rem;
+      margin-top: auto;
+    }
+    .card-tag {
+      font-size: 0.72rem;
+      padding: 0.2rem 0.6rem;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 0.25rem;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+    }
+    .card-arrow {
+      align-self: flex-end;
+      font-size: 1rem;
+      color: var(--muted);
+      transition: color 0.2s, transform 0.2s;
+    }
+    .project-card:hover .card-arrow { color: var(--blue-light); transform: translate(3px, -3px); }
+
+    /* ── CAPABILITIES ── */
+    #capabilities { background: var(--surface); }
+    .capabilities-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+    }
+    .cap-card {
+      padding: 2rem;
+      border: 1px solid var(--border);
+      border-radius: 0.8rem;
+      background: var(--bg);
+    }
+    .cap-icon {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+    .cap-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      margin-bottom: 0.8rem;
+      color: var(--text);
+    }
+    .cap-list {
+      list-style: none;
+      display: flex; flex-direction: column; gap: 0.4rem;
+    }
+    .cap-list li {
+      font-size: 0.85rem;
+      color: var(--muted);
+      display: flex; align-items: center; gap: 0.6rem;
+    }
+    .cap-list li::before {
+      content: '▸';
+      color: var(--orange);
+      font-size: 0.7rem;
+      flex-shrink: 0;
+    }
+
+    /* ── CONTACT ── */
+    #contact {
+      text-align: center;
+      padding: 8rem 4rem;
+    }
+    .contact-inner {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .contact-tagline {
+      font-size: 1.05rem;
+      color: var(--muted);
+      margin-bottom: 3rem;
+      font-style: italic;
+    }
+    .contact-items {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+      margin-bottom: 3rem;
+    }
+    .contact-item {
+      display: flex; align-items: center; gap: 0.7rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 0.5rem;
+      padding: 1rem 1.5rem;
+      text-decoration: none;
+      color: var(--text);
+      font-size: 0.9rem;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .contact-item:hover { border-color: var(--blue); color: var(--blue-light); }
+    .contact-icon { font-size: 1.1rem; }
+
+    .confidentiality {
+      font-size: 0.78rem;
+      color: var(--muted);
+      opacity: 0.6;
+      padding: 1rem;
+      border: 1px solid var(--border);
+      border-radius: 0.4rem;
+      display: inline-block;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 1.5rem 4rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    /* Scroll reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      .hero { grid-template-columns: 1fr; padding: 6rem 1.5rem 3rem; }
+      .hero-right { display: none; }
+      section { padding: 4rem 1.5rem; }
+      .divider { margin: 0 1.5rem; }
+      .capabilities-grid { grid-template-columns: 1fr; }
+      footer { flex-direction: column; gap: 0.5rem; padding: 1.5rem; }
+      #contact { padding: 5rem 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-logo">PD<span>.</span></a>
+    <ul class="nav-links">
+      <li><a href="#industrial">Industrial</a></li>
+      <li><a href="#concepts">Concepts</a></li>
+      <li><a href="#capabilities">Capabilities</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-left">
+      <div class="hero-tag">Operations & Process Development</div>
+      <h1 class="hero-name">Petar<br>Dojčino<span class="accent">vić</span></h1>
+      <p class="hero-title">Operations · CI · Data-Driven Execution</p>
+      <p class="hero-desc">
+        Structured operational thinking combined with hands-on industrial experience.
+        Focused on process optimization, KPI systems, safety frameworks, and scalable organizational development.
+      </p>
+      <div class="hero-tags">
+        <span class="tag">📊 KPI Systems</span>
+        <span class="tag">⚙️ Process Optimization</span>
+        <span class="tag">🔥 Safety Frameworks</span>
+        <span class="tag">🧠 Systems Thinking</span>
+        <span class="tag">📈 OEE / MTBF / MTTR</span>
+        <span class="tag">⚠️ Risk Management</span>
+      </div>
+      <div class="hero-cta">
+        <a href="#industrial" class="btn-primary">View Projects</a>
+        <a href="#contact" class="btn-secondary">Get in Touch</a>
+      </div>
+    </div>
+
+    <div class="hero-right">
+      <div class="stats-grid">
+        <div class="stat-card highlight">
+          <span class="stat-icon">⚙️</span>
+          <div class="stat-val">6<span class="unit">+</span></div>
+          <div class="stat-label">Projects Delivered</div>
+        </div>
+        <div class="stat-card">
+          <span class="stat-icon">🏭</span>
+          <div class="stat-val">2</div>
+          <div class="stat-label">Industrial Domains</div>
+        </div>
+        <div class="stat-card">
+          <span class="stat-icon">📊</span>
+          <div class="stat-val">OEE</div>
+          <div class="stat-label">Digital Monitoring</div>
+        </div>
+        <div class="stat-card">
+          <span class="stat-icon">🔥</span>
+          <div class="stat-val">HSE</div>
+          <div class="stat-label">Safety Frameworks</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- INDUSTRIAL PROJECTS -->
+  <section id="industrial">
+    <div class="section-label">Industrial & Operational</div>
+    <h2 class="section-title">Core Operations Projects</h2>
+    <div class="projects-grid">
+
+      <a href="process-optimization.html" class="project-card industrial reveal">
+        <div class="card-header">
+          <span class="card-num">Project 01</span>
+          <span class="card-type-badge badge-industrial">Industrial</span>
+        </div>
+        <div class="card-title">Digital Production Monitoring & OEE Framework</div>
+        <div class="card-desc">
+          Structured production data model and reporting system enabling shift-level visibility,
+          downtime classification, and corrective/preventive follow-up. Designed for real operational deployment.
+        </div>
+        <div class="card-tags">
+          <span class="card-tag">Power BI</span>
+          <span class="card-tag">OEE</span>
+          <span class="card-tag">MTBF / MTTR</span>
+          <span class="card-tag">RCA</span>
+        </div>
+        <span class="card-arrow">↗</span>
+      </a>
+
+      <a href="emergency-parking-safety.html" class="project-card industrial reveal">
+        <div class="card-header">
+          <span class="card-num">Project 02</span>
+          <span class="card-type-badge badge-industrial">Safety / HSE</span>
+        </div>
+        <div class="card-title">Emergency Access & Parking Safety System</div>
+        <div class="card-desc">
+          Workplace safety framework improving road visibility, structured parking flow,
+          and full readiness for evacuation and fire response scenarios.
+        </div>
+        <div class="card-tags">
+          <span class="card-tag">HSE</span>
+          <span class="card-tag">Risk Control</span>
+          <span class="card-tag">Emergency Planning</span>
+        </div>
+        <span class="card-arrow">↗</span>
+      </a>
+
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- CONCEPT PROJECTS -->
+  <section id="concepts">
+    <div class="section-label">Strategic & Concept Development</div>
+    <h2 class="section-title">Scalable System Concepts</h2>
+    <div class="projects-grid">
+
+      <a href="pesisttema.html" class="project-card reveal">
+        <div class="card-header">
+          <span class="card-num">Concept 01</span>
+          <span class="card-type-badge badge-concept">Urban / Public Safety</span>
+        </div>
+        <div class="card-title">PESISTTEMA — Public Safety Digital Platform</div>
+        <div class="card-desc">
+          Municipal safety platform integrating citizen reporting, emergency coordination logic,
+          and institutional interfaces through a unified digital architecture.
+        </div>
+        <div class="card-tags">
+          <span class="card-tag">System Architecture</span>
+          <span class="card-tag">Urban Safety</span>
+          <span class="card-tag">Platform Design</span>
+        </div>
+        <span class="card-arrow">↗</span>
+      </a>
+
+      <a href="hund-cafe.html" class="project-card reveal">
+        <div class="card-header">
+          <span class="card-num">Concept 02</span>
+          <span class="card-type-badge badge-concept">Hospitality Ops</span>
+        </div>
+        <div class="card-title">Hund Café — Operations Concept</div>
+        <div class="card-desc">
+          Dog-friendly café concept with detailed layout logic, customer flow design,
+          hygiene separation protocols, and a structured revenue model for scalable operations.
+        </div>
+        <div class="card-tags">
+          <span class="card-tag">Ops Design</span>
+          <span class="card-tag">Revenue Model</span>
+          <span class="card-tag">Hospitality</span>
+        </div>
+        <span class="card-arrow">↗</span>
+      </a>
+
+      <a href="motel-restaurant-hund.html" class="project-card reveal">
+        <div class="card-header">
+          <span class="card-num">Concept 03</span>
+          <span class="card-type-badge badge-concept">Facility Planning</span>
+        </div>
+        <div class="card-title">Motel & Restaurant for Dogs</div>
+        <div class="card-desc">
+          Large-scale hospitality concept combining accommodation, training services,
+          and structured facility planning with a full operational model.
+        </div>
+        <div class="card-tags">
+          <span class="card-tag">Facility Planning</span>
+          <span class="card-tag">Business Strategy</span>
+          <span class="card-tag">Scale Operations</span>
+        </div>
+        <span class="card-arrow">↗</span>
+      </a>
+
+
+
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- CAPABILITIES -->
+  <section id="capabilities">
+    <div class="section-label">What I Bring</div>
+    <h2 class="section-title">Capabilities</h2>
+    <div class="capabilities-grid">
+
+      <div class="cap-card reveal">
+        <span class="cap-icon">📈</span>
+        <div class="cap-title">Performance Systems</div>
+        <ul class="cap-list">
+          <li>KPI modeling & dashboard architecture</li>
+          <li>OEE / MTBF / MTTR analysis</li>
+          <li>Data-driven decision logic</li>
+          <li>Shift-level reporting design</li>
+        </ul>
+      </div>
+
+      <div class="cap-card reveal">
+        <span class="cap-icon">🛠</span>
+        <div class="cap-title">Process Improvement</div>
+        <ul class="cap-list">
+          <li>Bottleneck analysis & RCA</li>
+          <li>Waste reduction frameworks</li>
+          <li>Structured corrective follow-up</li>
+          <li>Standard Operating Procedures</li>
+        </ul>
+      </div>
+
+      <div class="cap-card reveal">
+        <span class="cap-icon">🔥</span>
+        <div class="cap-title">Risk & Safety</div>
+        <ul class="cap-list">
+          <li>Emergency readiness planning</li>
+          <li>Operational risk mitigation</li>
+          <li>HSE framework design</li>
+          <li>Preventive safety systems</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="contact-inner">
+      <div class="section-label" style="justify-content:center;">Get in Touch</div>
+      <h2 class="section-title">Let's Talk Operations</h2>
+      <p class="contact-tagline">
+        "Structured operational thinking combined with hands-on industrial experience."
+      </p>
+      <div class="contact-items">
+        <div class="contact-item">
+          <span class="contact-icon">✉️</span>
+          pdojcinovic&#64;proton&#46;me
+        </div>
+        <a href="tel:+46763626388" class="contact-item">
+          <span class="contact-icon">📞</span>
+          +46 (0)76 36 26 388
+        </a>
+      </div>
+      <div class="confidentiality">
+        🔒 No company names or sensitive operational data are published without approval.
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <span>© Petar Dojčinović — Operations Portfolio</span>
+    <span style="color: var(--orange);">Operations · CI · Data-Driven Execution</span>
+  </footer>
+
+
+  <script>
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) {
+          setTimeout(() => e.target.classList.add('visible'), i * 80);
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    reveals.forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
